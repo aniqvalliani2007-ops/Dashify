@@ -1,0 +1,3 @@
+-- Seed data for testing
+-- Since this dashboard relies on user-uploaded data, no initial seed is strictly required.
+-- You can add sample rows to public.profiles or system configuration parameters here.
