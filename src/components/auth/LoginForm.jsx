@@ -16,9 +16,9 @@ export const LoginForm = () => {
 
   useEffect(() => {
     if (user && !authLoading) {
-      window.location.replace('/dashboard')
+      navigate('/dashboard', { replace: true })
     }
-  }, [user, authLoading])
+  }, [user, authLoading, navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -28,8 +28,8 @@ export const LoginForm = () => {
     try {
       await signIn(email, password)
       toast.success('Successfully logged in!')
-      // Immediate redirect
-      window.location.replace('/dashboard')
+      // Navigate using React Router
+      navigate('/dashboard', { replace: true })
     } catch (err) {
       console.error(err)
       setError(err.message || 'Invalid email or password.')

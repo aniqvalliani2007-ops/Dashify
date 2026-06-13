@@ -12,9 +12,9 @@ export const RegisterForm = () => {
 
   useEffect(() => {
     if (user && !authLoading) {
-      window.location.replace('/dashboard')
+      navigate('/dashboard', { replace: true })
     }
-  }, [user, authLoading])
+  }, [user, authLoading, navigate])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')

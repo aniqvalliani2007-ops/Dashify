@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { LayoutDashboard, LogOut, BarChart3, Menu, X } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export const Navbar = () => {
   const { user, signOut } = useAuth()
@@ -10,13 +11,11 @@ export const Navbar = () => {
 
   const handleSignOut = async () => {
     try {
-      // Wait for sign out to complete
       await signOut()
-      // Then redirect directly to login using React Router
+      toast.success('Signed out successfully')
       navigate('/login', { replace: true })
     } catch (err) {
       console.error('Sign out error:', err)
-      // Still redirect even if error
       navigate('/login', { replace: true })
     }
   }
