@@ -46,13 +46,22 @@ Please analyze the dataset and answer the user's question with specific insights
     for (const model of models) {
       try {
         console.log(`📤 Sending request to OpenRouter with model ${model}...`)
+        
+        // Get the site URL - prioritize env variable, then detect from window location
+        const siteUrl = import.meta.env.VITE_SITE_URL || 
+                       (window.location.hostname.includes('localhost') 
+                         ? 'http://localhost:5173' 
+                         : window.location.origin)
+        
+        console.log(`🌐 Using site URL for OpenRouter: ${siteUrl}`)
+        
         const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${apiKey}`,
             'Content-Type': 'application/json',
-            'HTTP-Referer': window.location.origin || 'https://dashify.analytics',
-            'X-Title': 'Dashify CSV Analytics'
+            'HTTP-Referer': siteUrl,
+            'X-Title': 'Dashify - AI-Powered CSV Analytics Platform'
           },
           body: JSON.stringify({
             model: model,
