@@ -289,10 +289,10 @@ export const ChartContainer = ({ fileRows, headers }) => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
       {/* Left panel: Customizer (1 column) */}
-      <div className="xl:col-span-1 glass-card p-5 border border-gray-200 flex flex-col gap-5 h-fit xl:sticky xl:top-6">
+      <div className="xl:col-span-1 glass-card p-4 sm:p-5 border border-gray-200 flex flex-col gap-4 sm:gap-5 h-fit xl:sticky xl:top-6">
         <div className="flex items-center gap-2 pb-3 border-b border-gray-200">
           <Sliders size={18} className="text-blue-600" />
-          <h4 className="font-semibold text-gray-900 text-sm tracking-wide uppercase">Chart Customizer</h4>
+          <h4 className="font-semibold text-gray-900 text-xs sm:text-sm tracking-wide uppercase">Chart Customizer</h4>
         </div>
 
         {/* X Axis selector */}
@@ -350,10 +350,11 @@ export const ChartContainer = ({ fileRows, headers }) => {
           size="sm"
           onClick={exportAggregatedCSV}
           disabled={aggregatedData.length === 0}
-          className="mt-2 flex items-center justify-center gap-1.5 py-2"
+          className="mt-2 flex items-center justify-center gap-1.5 py-2 text-xs sm:text-sm"
         >
           <FileDown size={14} />
-          Export Aggregated CSV
+          <span className="hidden sm:inline">Export Aggregated CSV</span>
+          <span className="sm:hidden">Export CSV</span>
         </Button>
       </div>
 
@@ -362,7 +363,7 @@ export const ChartContainer = ({ fileRows, headers }) => {
         
         {/* Warning message if non-numeric Y axis selected */}
         {isYAxisNonNumeric && aggType !== 'count' && (
-          <div className="p-4 border border-amber-200 bg-amber-50 text-xs text-amber-800 flex items-start gap-2.5">
+          <div className="p-3 sm:p-4 border border-amber-200 bg-amber-50 text-xs text-amber-800 flex items-start gap-2.5">
             <span className="text-base select-none shrink-0 mt-0.5">⚠️</span>
             <div className="space-y-1">
               <p className="font-bold text-amber-900">Non-Numeric Y-Axis Metric Selected</p>
@@ -374,13 +375,13 @@ export const ChartContainer = ({ fileRows, headers }) => {
           </div>
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           
           {/* Card 1: Bar Chart */}
-          <div className="glass-card p-5 border border-gray-200 flex flex-col h-[380px]">
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
-              <BarChart3 size={16} className="text-blue-600" />
-              <h5 className="font-semibold text-gray-900 text-sm tracking-wide capitalize">
+          <div className="glass-card p-4 sm:p-5 border border-gray-200 flex flex-col h-[300px] sm:h-[380px]">
+            <div className="flex items-center gap-2 mb-3 sm:mb-4 pb-2 border-b border-gray-200">
+              <BarChart3 size={16} className="text-blue-600 shrink-0" />
+              <h5 className="font-semibold text-gray-900 text-xs sm:text-sm tracking-wide capitalize truncate">
                 Bar Chart: {aggType === 'count' ? 'Row Count' : `${aggType} of ${yAxisKey}`} by {xAxisKey}
               </h5>
             </div>
@@ -390,10 +391,10 @@ export const ChartContainer = ({ fileRows, headers }) => {
           </div>
 
           {/* Card 2: Line Chart */}
-          <div className="glass-card p-5 border border-gray-200 flex flex-col h-[380px]">
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
-              <LineIcon size={16} className="text-blue-600" />
-              <h5 className="font-semibold text-gray-900 text-sm tracking-wide capitalize">
+          <div className="glass-card p-4 sm:p-5 border border-gray-200 flex flex-col h-[300px] sm:h-[380px]">
+            <div className="flex items-center gap-2 mb-3 sm:mb-4 pb-2 border-b border-gray-200">
+              <LineIcon size={16} className="text-blue-600 shrink-0" />
+              <h5 className="font-semibold text-gray-900 text-xs sm:text-sm tracking-wide capitalize truncate">
                 Line Chart: {aggType === 'count' ? 'Row Count' : `${aggType} of ${yAxisKey}`} by {xAxisKey}
               </h5>
             </div>
@@ -403,10 +404,10 @@ export const ChartContainer = ({ fileRows, headers }) => {
           </div>
 
           {/* Card 3: Pie Chart */}
-          <div className="glass-card p-5 border border-gray-200 flex flex-col h-[380px]">
-            <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
-              <PieIcon size={16} className="text-blue-600" />
-              <h5 className="font-semibold text-gray-900 text-sm tracking-wide capitalize">
+          <div className="glass-card p-4 sm:p-5 border border-gray-200 flex flex-col h-[300px] sm:h-[380px]">
+            <div className="flex items-center gap-2 mb-3 sm:mb-4 pb-2 border-b border-gray-200">
+              <PieIcon size={16} className="text-blue-600 shrink-0" />
+              <h5 className="font-semibold text-gray-900 text-xs sm:text-sm tracking-wide capitalize truncate">
                 Pie Chart: Distribution by {xAxisKey}
               </h5>
             </div>
@@ -416,11 +417,11 @@ export const ChartContainer = ({ fileRows, headers }) => {
           </div>
 
           {/* Card 4: AI Insights Panel */}
-          <div className="glass-card p-5 border border-gray-200 flex flex-col h-[380px]">
-            <div className="flex items-center justify-between mb-4 pb-2 border-b border-gray-200">
+          <div className="glass-card p-4 sm:p-5 border border-gray-200 flex flex-col h-[300px] sm:h-[380px]">
+            <div className="flex items-center justify-between mb-3 sm:mb-4 pb-2 border-b border-gray-200">
               <div className="flex items-center gap-2">
-                <Sparkles size={16} className="text-blue-600" />
-                <h5 className="font-semibold text-gray-900 text-sm tracking-wide">
+                <Sparkles size={16} className="text-blue-600 shrink-0" />
+                <h5 className="font-semibold text-gray-900 text-xs sm:text-sm tracking-wide">
                   AI Data Analyst
                 </h5>
               </div>
@@ -431,7 +432,7 @@ export const ChartContainer = ({ fileRows, headers }) => {
                   disabled={isAiLoading}
                 >
                   <RefreshCw size={12} className={isAiLoading ? 'animate-spin' : ''} />
-                  Refresh
+                  <span className="hidden sm:inline">Refresh</span>
                 </button>
               )}
             </div>
@@ -443,13 +444,13 @@ export const ChartContainer = ({ fileRows, headers }) => {
                   <Loader text="AI Analyst is crunching data..." />
                 </div>
               ) : aiResponse ? (
-                <div className="p-4 border border-gray-200 bg-gray-50 text-gray-700 leading-relaxed overflow-x-auto">
+                <div className="p-3 sm:p-4 border border-gray-200 bg-gray-50 text-gray-700 leading-relaxed overflow-x-auto">
                   {formatMarkdown(aiResponse)}
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-center h-full gap-2 text-gray-500 p-4">
                   <Sparkles size={24} className="text-gray-400 animate-pulse" />
-                  <p>Click "Analyze Dataset" to generate insights.</p>
+                  <p className="text-xs">Click "Analyze Dataset" to generate insights.</p>
                 </div>
               )}
             </div>
@@ -464,11 +465,11 @@ export const ChartContainer = ({ fileRows, headers }) => {
             >
               <input
                 type="text"
-                placeholder="Ask about columns, trends, summaries..."
+                placeholder="Ask about data..."
                 value={aiQuery}
                 onChange={(e) => setAiQuery(e.target.value)}
                 disabled={isAiLoading}
-                className="flex-1 bg-white border border-gray-300 hover:border-gray-400 focus:border-blue-500 text-gray-900 py-1.5 px-3 text-xs focus:outline-none placeholder-gray-400 disabled:opacity-50"
+                className="flex-1 bg-white border border-gray-300 hover:border-gray-400 focus:border-blue-500 text-gray-900 py-1.5 px-2 sm:px-3 text-xs focus:outline-none placeholder-gray-400 disabled:opacity-50"
               />
               <Button
                 type="submit"

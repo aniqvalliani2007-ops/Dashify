@@ -61,12 +61,12 @@ export const AboutPage = () => {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-blue-50 via-white to-gray-50 border-b border-gray-200 py-20">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+      <section className="bg-gradient-to-br from-blue-50 via-white to-gray-50 border-b border-gray-200 py-12 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 sm:mb-6">
             About Dashify
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             We're on a mission to make data analysis simple, fast, and accessible for everyone. 
             No coding required, no complex setup—just powerful insights at your fingertips.
           </p>
@@ -74,12 +74,12 @@ export const AboutPage = () => {
       </section>
 
       {/* Story Section */}
-      <section className="py-20 bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="py-12 sm:py-20 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
-              <div className="space-y-4 text-gray-600 leading-relaxed">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Our Story</h2>
+              <div className="space-y-3 sm:space-y-4 text-sm sm:text-base text-gray-600 leading-relaxed">
                 <p>
                   Dashify was born out of frustration. Our founders spent years working with data teams 
                   who struggled with complex tools that required extensive training and technical expertise.
@@ -99,23 +99,23 @@ export const AboutPage = () => {
                 </p>
               </div>
             </div>
-            <div className="glass-card border border-gray-200 p-8 bg-gradient-to-br from-blue-50 to-white">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center p-6 bg-white border border-gray-200">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">10K+</div>
-                  <div className="text-sm text-gray-600">Active Users</div>
+            <div className="glass-card border border-gray-200 p-6 sm:p-8 bg-gradient-to-br from-blue-50 to-white">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
+                <div className="text-center p-4 sm:p-6 bg-white border border-gray-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">10K+</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Active Users</div>
                 </div>
-                <div className="text-center p-6 bg-white border border-gray-200">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">1M+</div>
-                  <div className="text-sm text-gray-600">Files Analyzed</div>
+                <div className="text-center p-4 sm:p-6 bg-white border border-gray-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">1M+</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Files Analyzed</div>
                 </div>
-                <div className="text-center p-6 bg-white border border-gray-200">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">50+</div>
-                  <div className="text-sm text-gray-600">Countries</div>
+                <div className="text-center p-4 sm:p-6 bg-white border border-gray-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">50+</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Countries</div>
                 </div>
-                <div className="text-center p-6 bg-white border border-gray-200">
-                  <div className="text-3xl font-bold text-blue-600 mb-2">99.9%</div>
-                  <div className="text-sm text-gray-600">Uptime</div>
+                <div className="text-center p-4 sm:p-6 bg-white border border-gray-200">
+                  <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-2">99.9%</div>
+                  <div className="text-xs sm:text-sm text-gray-600">Uptime</div>
                 </div>
               </div>
             </div>

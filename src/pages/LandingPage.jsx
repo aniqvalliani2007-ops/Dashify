@@ -98,46 +98,46 @@ export const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-50 via-white to-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-20 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 lg:py-32">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
             {/* Left: Hero Content */}
             <div className="text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold mb-4 sm:mb-6">
                 <Sparkles size={14} />
                 <span>Next-Gen Analytics Platform</span>
               </div>
               
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900 leading-tight mb-6">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-gray-900 leading-tight mb-4 sm:mb-6">
                 Transform CSV Data into{' '}
                 <span className="text-blue-600">Powerful Insights</span>
               </h1>
               
-              <p className="text-lg text-gray-600 leading-relaxed mb-8 max-w-xl">
+              <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8 max-w-xl">
                 Upload, visualize, and analyze your data in seconds. No coding required. 
                 Built for analysts, managers, and teams who need fast, reliable insights.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">
                 <Link
                   to={user ? '/dashboard' : '/register'}
-                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-200 text-sm sm:text-base"
                 >
                   {user ? 'Go to Dashboard' : 'Start Free Trial'}
                   <ArrowRight size={18} />
                 </Link>
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 text-gray-900 font-semibold px-8 py-4 transition-all duration-200"
+                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 text-gray-900 font-semibold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-200 text-sm sm:text-base"
                 >
                   View Demo
                 </Link>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-4 gap-6 pt-8 border-t border-gray-200">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-gray-200">
                 {stats.map((stat, idx) => (
                   <div key={idx}>
-                    <div className="text-2xl font-bold text-blue-600">{stat.value}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-blue-600">{stat.value}</div>
                     <div className="text-xs text-gray-600 mt-1">{stat.label}</div>
                   </div>
                 ))}
@@ -145,50 +145,50 @@ export const LandingPage = () => {
             </div>
 
             {/* Right: Hero Image/Visual */}
-            <div className="relative">
-              <div className="glass-card border-2 border-gray-200 p-8 bg-white shadow-2xl">
-                <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-200">
+            <div className="relative order-first lg:order-last">
+              <div className="glass-card border-2 border-gray-200 p-6 sm:p-8 bg-white shadow-2xl">
+                <div className="flex items-center gap-2 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                   <BarChart3 size={20} className="text-blue-600" />
-                  <span className="font-semibold text-gray-900">Live Dashboard Preview</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">Live Dashboard Preview</span>
                 </div>
-                <div className="space-y-4">
-                  <div className="h-32 bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center">
-                    <Activity size={48} className="text-blue-600" />
+                <div className="space-y-3 sm:space-y-4">
+                  <div className="h-24 sm:h-32 bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center">
+                    <Activity size={40} className="text-blue-600 sm:w-12 sm:h-12" />
                   </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="h-20 bg-gray-50 border border-gray-200"></div>
-                    <div className="h-20 bg-gray-50 border border-gray-200"></div>
-                    <div className="h-20 bg-gray-50 border border-gray-200"></div>
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                    <div className="h-16 sm:h-20 bg-gray-50 border border-gray-200"></div>
+                    <div className="h-16 sm:h-20 bg-gray-50 border border-gray-200"></div>
+                    <div className="h-16 sm:h-20 bg-gray-50 border border-gray-200"></div>
                   </div>
-                  <div className="h-24 bg-gray-50 border border-gray-200"></div>
+                  <div className="h-20 sm:h-24 bg-gray-50 border border-gray-200"></div>
                 </div>
               </div>
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-blue-600 opacity-10 blur-3xl"></div>
+              <div className="absolute -bottom-6 -right-6 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600 opacity-10 blur-3xl"></div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+      <section className="py-12 sm:py-20 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               Everything You Need to Analyze Data
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
               Powerful features designed for modern data analysis. Simple enough for beginners, 
               powerful enough for experts.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {features.map((feature, idx) => (
-              <div key={idx} className="glass-card border border-gray-200 p-6 hover:border-blue-300 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-blue-50 border border-blue-200 flex items-center justify-center mb-4">
+              <div key={idx} className="glass-card border border-gray-200 p-5 sm:p-6 hover:border-blue-300 hover:shadow-lg transition-all">
+                <div className="w-12 h-12 bg-blue-50 border border-blue-200 flex items-center justify-center mb-3 sm:mb-4">
                   <feature.icon size={24} className="text-blue-600" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{feature.desc}</p>
               </div>
             ))}
@@ -286,20 +286,20 @@ export const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <footer className="bg-gray-900 text-gray-400 py-8 sm:py-12 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4">
                 <BarChart3 size={24} className="text-blue-500" />
-                <span className="text-xl font-bold text-white">Dashify</span>
+                <span className="text-lg sm:text-xl font-bold text-white">Dashify</span>
               </div>
               <p className="text-sm text-gray-500">
                 Transform your CSV data into beautiful, actionable insights.
               </p>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4 text-sm">Product</h4>
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm">Product</h4>
               <ul className="space-y-2 text-sm">
                 <li><Link to="/" className="hover:text-white transition-colors">Features</Link></li>
                 <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
@@ -307,7 +307,7 @@ export const LandingPage = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4 text-sm">Support</h4>
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm">Support</h4>
               <ul className="space-y-2 text-sm">
                 <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
                 <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
@@ -315,7 +315,7 @@ export const LandingPage = () => {
               </ul>
             </div>
             <div>
-              <h4 className="text-white font-semibold mb-4 text-sm">Legal</h4>
+              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm">Legal</h4>
               <ul className="space-y-2 text-sm">
                 <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
@@ -323,7 +323,7 @@ export const LandingPage = () => {
               </ul>
             </div>
           </div>
-          <div className="pt-8 border-t border-gray-800 text-center text-sm">
+          <div className="pt-6 sm:pt-8 border-t border-gray-800 text-center text-xs sm:text-sm">
             <p>&copy; {new Date().getFullYear()} Dashify. All rights reserved. Built with React, Tailwind CSS, and Supabase.</p>
           </div>
         </div>

@@ -31,12 +31,13 @@ export const FileHistory = () => {
 
   return (
     <div className="w-full glass-card border border-gray-200 overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
-        <h3 className="font-semibold text-gray-900 text-sm tracking-wide uppercase">Dataset Upload History</h3>
+      <div className="px-4 sm:px-6 py-4 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+        <h3 className="font-semibold text-gray-900 text-xs sm:text-sm tracking-wide uppercase">Dataset Upload History</h3>
         <span className="text-xs text-gray-600">{files.length} Total</span>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Desktop Table View - Hidden on mobile */}
+      <div className="hidden lg:block overflow-x-auto">
         <table className="w-full text-left border-collapse text-sm">
           <thead>
             <tr className="border-b border-gray-200 text-gray-700 font-medium text-xs uppercase bg-gray-50">
@@ -112,6 +113,67 @@ export const FileHistory = () => {
             })}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View - Shown on mobile */}
+      <div className="lg:hidden divide-y divide-gray-200">
+        {files.map((file) => {
+          const isSelected = selectedFile?.id === file.id
+          const createdDate = new Date(file.created_at).toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+          })
+
+          return (
+            <div
+              key={file.id}
+              className={`p-4 hover:bg-gray-50 transition-colors cursor-pointer ${
+                isSelected ? 'bg-blue-50' : ''
+              }`}
+              onClick={() => setSelectedFile(file)}
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <div className="p-2 bg-blue-50 text-blue-600 shrink-0">
+                  <FileSpreadsheet size={16} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h4 className="font-medium text-gray-900 text-sm truncate mb-1">
+                    {file.original_name}
+                  </h4>
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-gray-600">
+                    <span className="flex items-center gap-1">
+                      <Calendar size={11} className="text-gray-400" />
+                      {createdDate}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Layers size={11} className="text-gray-400" />
+                      {file.row_count.toLocaleString()} × {file.column_count || 0}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+                <Button
+                  variant="blue"
+                  size="sm"
+                  className="flex-1 flex items-center justify-center gap-1 text-xs"
+                  onClick={() => setSelectedFile(file)}
+                >
+                  Analyze
+                  <ArrowUpRight size={12} />
+                </Button>
+                <button
+                  onClick={(e) => handleDelete(e, file)}
+                  className="p-2 text-gray-500 hover:text-red-600 bg-white hover:bg-red-50 border border-gray-300 hover:border-red-300 transition-all duration-200 cursor-pointer shrink-0"
+                  title="Delete Dataset"
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
