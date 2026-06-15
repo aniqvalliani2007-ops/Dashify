@@ -2,13 +2,14 @@ import React, { useState } from 'react'
 import { useCSV } from '../hooks/useCSV'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
 import PowerBIDashboard from '../components/dashboard/PowerBIDashboard'
+import DashboardBuilder from '../components/dashboard/DashboardBuilder'
 import DataTransformPanel from '../components/dashboard/DataTransformPanel'
 import RelationshipDetector from '../components/dashboard/RelationshipDetector'
 import FileHistory from '../components/dashboard/FileHistory'
 import CSVUploader from '../components/csv/CSVUploader'
 import Modal from '../components/common/Modal'
 import Loader from '../components/common/Loader'
-import { FileSpreadsheet, Layers, Calendar, BarChart3, Database, UploadCloud, Search, Share2, Download, Filter, TrendingUp, Wand2 } from 'lucide-react'
+import { FileSpreadsheet, Layers, Calendar, BarChart3, Database, UploadCloud, Search, Share2, Download, Filter, TrendingUp, Wand2, Layout } from 'lucide-react'
 import Button from '../components/common/Button'
 import toast from 'react-hot-toast'
 
@@ -24,7 +25,7 @@ export const DashboardPage = () => {
 
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
-  const [activeTab, setActiveTab] = useState('dashboard') // dashboard, transform, relationships
+  const [activeTab, setActiveTab] = useState('insights') // insights, builder, transform, relationships
   const [transformConfig, setTransformConfig] = useState(null)
 
   const handleExportData = () => {
@@ -54,7 +55,7 @@ export const DashboardPage = () => {
 
   const handleTransformApply = (config) => {
     setTransformConfig(config)
-    setActiveTab('dashboard')
+    setActiveTab('insights')
     toast.success('Transformations applied successfully!')
   }
 
@@ -166,36 +167,31 @@ export const DashboardPage = () => {
         {selectedFile ? (
           <>
             {/* Tab Navigation */}
-            <div className="flex items-center gap-2 border-b border-gray-200 overflow-x-auto">
+            <div className="flex items-center gap-2 border-b border-gray-200 overflow-x-auto pb-px">
               <button
-                onClick={() => setActiveTab('dashboard')}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                  activeTab === 'dashboard'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
+                onClick={() => setActiveTab('insights')}
+                className={`tab-button ${activeTab === 'insights' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
               >
                 <BarChart3 size={16} />
-                Dashboard
+                Auto Insights
+              </button>
+              <button
+                onClick={() => setActiveTab('builder')}
+                className={`tab-button ${activeTab === 'builder' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
+              >
+                <Layout size={16} />
+                Dashboard Builder
               </button>
               <button
                 onClick={() => setActiveTab('transform')}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                  activeTab === 'transform'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
+                className={`tab-button ${activeTab === 'transform' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
               >
                 <Wand2 size={16} />
                 Transform
               </button>
               <button
                 onClick={() => setActiveTab('relationships')}
-                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
-                  activeTab === 'relationships'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                }`}
+                className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
               >
                 <TrendingUp size={16} />
                 Relationships
@@ -209,9 +205,17 @@ export const DashboardPage = () => {
               </div>
             ) : fileRows && fileRows.length > 0 ? (
               <>
-                {activeTab === 'dashboard' && (
+                {activeTab === 'insights' && (
                   <PowerBIDashboard 
                     fileRows={fileRows} 
+                    headers={selectedFile.columns || []}
+                    transformConfig={transformConfig}
+                  />
+                )}
+
+                {activeTab === 'builder' && (
+                  <DashboardBuilder
+                    fileRows={fileRows}
                     headers={selectedFile.columns || []}
                     transformConfig={transformConfig}
                   />
