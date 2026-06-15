@@ -63,7 +63,7 @@ export const DashboardPage = () => {
     <DashboardLayout>
       <div className="space-y-6">
         {/* Power BI-style Search Bar */}
-        <div className="glass-card border border-gray-200 p-4">
+        <div className="search-bar p-4">
           <div className="flex items-center gap-3">
             <Search size={18} className="text-gray-400" />
             <input
@@ -75,9 +75,10 @@ export const DashboardPage = () => {
             />
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-3 py-1.5 text-xs font-medium transition-colors ${
+              className={`flex items-center gap-2 px-4 py-2 text-xs font-medium transition-colors ${
                 showFilters ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
+              style={{borderRadius: '3px'}}
             >
               <Filter size={14} />
               Filters
@@ -86,36 +87,36 @@ export const DashboardPage = () => {
         </div>
 
         {/* Header with Actions */}
-        <div className="flex flex-col gap-4 pb-4 border-b border-gray-200">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <div className="flex flex-col gap-6 pb-6 border-b border-gray-200">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2 flex-wrap">
-                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900">
+                <h2 className="text-2xl font-semibold text-gray-900" style={{letterSpacing: '-0.03em'}}>
                   Analytics Studio
                 </h2>
                 {selectedFile && (
-                  <span className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 bg-green-50 text-green-700 border border-green-200 rounded">
+                  <span className="badge badge-success flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
                     Live
                   </span>
                 )}
               </div>
               {selectedFile && (
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-gray-600">
-                  <span className="flex items-center gap-1.5">
-                    <FileSpreadsheet size={12} className="text-blue-600 shrink-0" />
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
+                  <span className="flex items-center gap-2">
+                    <FileSpreadsheet size={14} className="text-blue-600 shrink-0" />
                     <strong className="text-gray-900 truncate max-w-[200px]">{selectedFile.original_name}</strong>
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Database size={12} className="text-gray-500 shrink-0" />
+                  <span className="flex items-center gap-2">
+                    <Database size={14} className="text-gray-500 shrink-0" />
                     {selectedFile.row_count?.toLocaleString() || 0} rows
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Layers size={12} className="text-gray-500 shrink-0" />
+                  <span className="flex items-center gap-2">
+                    <Layers size={14} className="text-gray-500 shrink-0" />
                     {selectedFile.column_count || selectedFile.columns?.length || 0} columns
                   </span>
-                  <span className="flex items-center gap-1.5">
-                    <Calendar size={12} className="text-gray-500 shrink-0" />
+                  <span className="flex items-center gap-2">
+                    <Calendar size={14} className="text-gray-500 shrink-0" />
                     {new Date(selectedFile.created_at).toLocaleDateString(undefined, {
                       month: 'short',
                       day: 'numeric',
@@ -126,14 +127,15 @@ export const DashboardPage = () => {
               )}
             </div>
             
-            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
               {selectedFile && (
                 <>
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="flex items-center gap-1.5 flex-1 sm:flex-none justify-center"
+                    className="flex items-center gap-2 flex-1 sm:flex-none justify-center px-4 py-2"
                     onClick={handleShare}
+                    style={{borderRadius: '3px'}}
                   >
                     <Share2 size={14} />
                     <span className="hidden sm:inline">Share</span>
@@ -141,8 +143,9 @@ export const DashboardPage = () => {
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="flex items-center gap-1.5 flex-1 sm:flex-none justify-center"
+                    className="flex items-center gap-2 flex-1 sm:flex-none justify-center px-4 py-2"
                     onClick={handleExportData}
+                    style={{borderRadius: '3px'}}
                   >
                     <Download size={14} />
                     <span className="hidden sm:inline">Export</span>
@@ -152,8 +155,9 @@ export const DashboardPage = () => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex items-center gap-1.5 flex-1 sm:flex-none justify-center"
+                className="flex items-center gap-2 flex-1 sm:flex-none justify-center px-4 py-2"
                 onClick={() => setIsUploadOpen(true)}
+                style={{borderRadius: '3px'}}
               >
                 <UploadCloud size={14} />
                 {selectedFile ? <span className="hidden sm:inline">Upload New</span> : <span className="hidden sm:inline">Upload CSV</span>}

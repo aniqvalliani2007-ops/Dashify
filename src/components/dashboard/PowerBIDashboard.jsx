@@ -179,25 +179,26 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
   }
 
   return (
-    <div className="space-y-6" key={refreshKey}>
+    <div className="space-y-8 fade-in" key={refreshKey}>
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-blue-600 text-white rounded">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-start gap-4">
+          <div className="p-3 bg-blue-600 text-white" style={{borderRadius: '3px'}}>
             <LayoutDashboard size={24} />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Power BI Dashboard</h2>
+            <h2 className="text-2xl font-semibold text-gray-900 mb-1" style={{letterSpacing: '-0.03em'}}>Power BI Dashboard</h2>
             <p className="text-sm text-gray-600">Auto-generated intelligent insights</p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button
             variant="secondary"
             size="sm"
             onClick={handleRefresh}
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-2 px-4 py-2"
+            style={{borderRadius: '3px'}}
           >
             <RefreshCw size={14} />
             <span className="hidden sm:inline">Refresh</span>
@@ -205,7 +206,8 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
           <Button
             variant="primary"
             size="sm"
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-2 px-4 py-2"
+            style={{borderRadius: '3px'}}
           >
             <Download size={14} />
             <span className="hidden sm:inline">Export</span>
@@ -214,23 +216,23 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {keyMetrics.map((metric, idx) => (
           <div
             key={idx}
-            className="glass-card border border-gray-200 p-4 sm:p-5 hover:shadow-lg transition-all cursor-pointer group"
+            className="metric-card cursor-pointer group"
             onClick={() => setSelectedMetric(metric)}
           >
-            <div className="flex items-start justify-between mb-3">
-              <div className={`p-2 sm:p-2.5 rounded bg-${metric.color}-50 text-${metric.color}-600 group-hover:bg-${metric.color}-100 transition-colors`}>
+            <div className="flex items-start justify-between mb-4">
+              <div className={`p-2.5 bg-${metric.color}-50 text-${metric.color}-600`} style={{borderRadius: '3px'}}>
                 <metric.icon size={20} />
               </div>
               <Maximize2 size={14} className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
-            <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
+            <div className="text-3xl font-bold text-gray-900 mb-1.5">
               {metric.value}
             </div>
-            <div className="text-xs sm:text-sm text-gray-600 truncate">
+            <div className="text-sm text-gray-600 font-medium">
               {metric.label}
             </div>
           </div>
@@ -238,18 +240,18 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
       </div>
 
       {/* Visualizations Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {dashboardData.map((viz, idx) => (
-          <div key={idx} className="glass-card border border-gray-200 p-4 sm:p-6 flex flex-col h-[400px]">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
-              <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate pr-2">
+          <div key={idx} className="chart-container flex flex-col" style={{minHeight: '420px'}}>
+            <div className="flex items-center justify-between mb-5 pb-4 border-b border-gray-100">
+              <h3 className="text-base font-semibold text-gray-900 truncate pr-4">
                 {viz.title}
               </h3>
-              <div className={`p-1.5 rounded ${
+              <div className={`p-2 ${
                 viz.type === 'bar' ? 'bg-blue-50 text-blue-600' :
                 viz.type === 'line' ? 'bg-green-50 text-green-600' :
                 'bg-purple-50 text-purple-600'
-              }`}>
+              }`} style={{borderRadius: '3px'}}>
                 {viz.type === 'bar' && <BarChart3 size={16} />}
                 {viz.type === 'line' && <Activity size={16} />}
                 {viz.type === 'pie' && <PieChartIcon size={16} />}
@@ -272,33 +274,33 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
       </div>
 
       {/* Data Insights */}
-      <div className="glass-card border border-blue-200 bg-gradient-to-r from-blue-50 to-blue-100 p-6">
-        <h3 className="text-lg font-bold text-blue-900 mb-3 flex items-center gap-2">
+      <div className="glass-card p-6 border border-blue-100 bg-gradient-to-r from-blue-50/50 to-blue-100/50" style={{borderRadius: '4px'}}>
+        <h3 className="text-base font-semibold text-blue-900 mb-4 flex items-center gap-2.5">
           <TrendingUp size={20} />
           Quick Insights
         </h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-800">
-          <div className="flex items-start gap-2">
-            <div className="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0" />
-            <p>Dataset contains {transformedData.length.toLocaleString()} records across {visibleHeaders.length} columns</p>
+          <div className="flex items-start gap-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 shrink-0" />
+            <p className="leading-relaxed">Dataset contains <strong>{transformedData.length.toLocaleString()}</strong> records across <strong>{visibleHeaders.length}</strong> columns</p>
           </div>
           {bestColumns && (
             <>
-              <div className="flex items-start gap-2">
-                <div className="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0" />
-                <p>Primary categorical dimension: <strong>{bestColumns.categorical}</strong></p>
+              <div className="flex items-start gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 shrink-0" />
+                <p className="leading-relaxed">Primary categorical dimension: <strong>{bestColumns.categorical}</strong></p>
               </div>
               {bestColumns.numeric !== bestColumns.categorical && (
-                <div className="flex items-start gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0" />
-                  <p>Primary numeric measure: <strong>{bestColumns.numeric}</strong></p>
+                <div className="flex items-start gap-3">
+                  <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 shrink-0" />
+                  <p className="leading-relaxed">Primary numeric measure: <strong>{bestColumns.numeric}</strong></p>
                 </div>
               )}
             </>
           )}
-          <div className="flex items-start gap-2">
-            <div className="w-2 h-2 rounded-full bg-blue-600 mt-1.5 shrink-0" />
-            <p>Dashboard automatically adapts to your data structure</p>
+          <div className="flex items-start gap-3">
+            <div className="w-1.5 h-1.5 rounded-full bg-blue-600 mt-2 shrink-0" />
+            <p className="leading-relaxed">Dashboard automatically adapts to your data structure</p>
           </div>
         </div>
       </div>
