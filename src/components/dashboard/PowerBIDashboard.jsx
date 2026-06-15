@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { LayoutDashboard, TrendingUp, PieChart, BarChart3, Activity, Download, RefreshCw, Maximize2 } from 'lucide-react'
+import { LayoutDashboard, TrendingUp, PieChart as PieChartIcon, BarChart3, Activity, Download, RefreshCw, Maximize2 } from 'lucide-react'
 import BarChart from '../charts/BarChart'
 import LineChart from '../charts/LineChart'
 import PieChart from '../charts/PieChart'
@@ -156,7 +156,7 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
         metrics.push({
           label: `Avg ${bestColumns.numeric}`,
           value: avg.toLocaleString(undefined, { maximumFractionDigits: 2 }),
-          icon: PieChart,
+          icon: PieChartIcon,
           color: 'orange'
         })
       }
@@ -252,7 +252,7 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
               }`}>
                 {viz.type === 'bar' && <BarChart3 size={16} />}
                 {viz.type === 'line' && <Activity size={16} />}
-                {viz.type === 'pie' && <PieChart size={16} />}
+                {viz.type === 'pie' && <PieChartIcon size={16} />}
               </div>
             </div>
 
