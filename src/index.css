@@ -232,23 +232,23 @@ input:focus, select:focus, textarea:focus {
 /* Minimalist search bar */
 .search-bar {
   background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(229, 231, 235, 0.4);
-  border-radius: 3px;
-  backdrop-filter: blur(20px);
+  border: 1px solid rgba(229, 231, 235, 0.3);
+  border-radius: 2px;
+  backdrop-filter: blur(24px);
 }
 
 .search-bar:focus-within {
   border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.05);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.04);
 }
 
 /* Clean spacing */
 .section-spacing {
-  padding: 1.5rem 0;
+  padding: 2rem 0;
 }
 
 .card-spacing {
-  padding: 1.25rem;
+  padding: 1.75rem;
 }
 
 /* Typography refinement */
