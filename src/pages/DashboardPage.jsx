@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { useCSV } from '../hooks/useCSV'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
-import StatsCard from '../components/dashboard/StatsCard'
-import ChartContainer from '../components/charts/ChartContainer'
+import PowerBIDashboard from '../components/dashboard/PowerBIDashboard'
+import DataTransformPanel from '../components/dashboard/DataTransformPanel'
+import RelationshipDetector from '../components/dashboard/RelationshipDetector'
 import FileHistory from '../components/dashboard/FileHistory'
 import CSVUploader from '../components/csv/CSVUploader'
 import Modal from '../components/common/Modal'
 import Loader from '../components/common/Loader'
-import { FileSpreadsheet, Layers, Calendar, BarChart3, Database, Sparkles, UploadCloud, Search, Share2, Download, Filter, TrendingUp } from 'lucide-react'
+import { FileSpreadsheet, Layers, Calendar, BarChart3, Database, UploadCloud, Search, Share2, Download, Filter, TrendingUp, Wand2 } from 'lucide-react'
 import Button from '../components/common/Button'
 import toast from 'react-hot-toast'
 
@@ -23,6 +24,8 @@ export const DashboardPage = () => {
 
   const [searchQuery, setSearchQuery] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [activeTab, setActiveTab] = useState('dashboard') // dashboard, transform, relationships
+  const [transformConfig, setTransformConfig] = useState(null)
 
   const handleExportData = () => {
     if (!selectedFile || !fileRows || fileRows.length === 0) {
@@ -47,6 +50,12 @@ export const DashboardPage = () => {
 
   const handleShare = () => {
     toast.success('Share functionality coming soon!')
+  }
+
+  const handleTransformApply = (config) => {
+    setTransformConfig(config)
+    setActiveTab('dashboard')
+    toast.success('Transformations applied successfully!')
   }
 
   return (
@@ -156,44 +165,73 @@ export const DashboardPage = () => {
         {/* Selected file analysis */}
         {selectedFile ? (
           <>
-            {/* Stats Cards Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatsCard
-                title="Active Dataset"
-                value={selectedFile.original_name}
-                icon={FileSpreadsheet}
-                description="Currently analyzing"
-              />
-              <StatsCard
-                title="Total Rows"
-                value={(selectedFile.row_count || 0).toLocaleString()}
-                icon={Database}
-                description="Data records"
-              />
-              <StatsCard
-                title="Columns"
-                value={selectedFile.column_count || (selectedFile.columns?.length || 0)}
-                icon={Layers}
-                description="Data dimensions"
-              />
-              <StatsCard
-                title="Last Updated"
-                value={new Date(selectedFile.created_at).toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric'
-                })}
-                icon={Calendar}
-                description="Upload date"
-              />
+            {/* Tab Navigation */}
+            <div className="flex items-center gap-2 border-b border-gray-200 overflow-x-auto">
+              <button
+                onClick={() => setActiveTab('dashboard')}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === 'dashboard'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                }`}
+              >
+                <BarChart3 size={16} />
+                Dashboard
+              </button>
+              <button
+                onClick={() => setActiveTab('transform')}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === 'transform'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                }`}
+              >
+                <Wand2 size={16} />
+                Transform
+              </button>
+              <button
+                onClick={() => setActiveTab('relationships')}
+                className={`flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
+                  activeTab === 'relationships'
+                    ? 'border-blue-600 text-blue-600'
+                    : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                }`}
+              >
+                <TrendingUp size={16} />
+                Relationships
+              </button>
             </div>
 
-            {/* Interactive Charts Area */}
+            {/* Tab Content */}
             {isLoadingRows ? (
               <div className="p-20 glass-card border border-gray-200 flex items-center justify-center">
                 <Loader text="Loading data from storage..." />
               </div>
             ) : fileRows && fileRows.length > 0 ? (
-              <ChartContainer fileRows={fileRows} headers={selectedFile.columns || []} />
+              <>
+                {activeTab === 'dashboard' && (
+                  <PowerBIDashboard 
+                    fileRows={fileRows} 
+                    headers={selectedFile.columns || []}
+                    transformConfig={transformConfig}
+                  />
+                )}
+
+                {activeTab === 'transform' && (
+                  <DataTransformPanel
+                    data={fileRows}
+                    columns={selectedFile.columns || []}
+                    onTransformApply={handleTransformApply}
+                  />
+                )}
+
+                {activeTab === 'relationships' && (
+                  <RelationshipDetector
+                    data={fileRows}
+                    columns={selectedFile.columns || []}
+                  />
+                )}
+              </>
             ) : (
               <div className="p-12 glass-card border border-gray-200 flex items-center justify-center text-center">
                 <div className="space-y-3">
@@ -236,25 +274,6 @@ export const DashboardPage = () => {
                 <UploadCloud size={18} />
                 Upload Your First Dataset
               </Button>
-            </div>
-
-            {/* Feature highlights */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 w-full max-w-2xl">
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded text-left">
-                <BarChart3 size={20} className="text-blue-600 mb-2" />
-                <h4 className="text-xs font-semibold text-gray-900 mb-1">Interactive Charts</h4>
-                <p className="text-xs text-gray-600">Bar, line, and pie charts with customizable axes</p>
-              </div>
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded text-left">
-                <Sparkles size={20} className="text-blue-600 mb-2" />
-                <h4 className="text-xs font-semibold text-gray-900 mb-1">AI Insights</h4>
-                <p className="text-xs text-gray-600">Get intelligent analysis of your data trends</p>
-              </div>
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded text-left">
-                <Download size={20} className="text-blue-600 mb-2" />
-                <h4 className="text-xs font-semibold text-gray-900 mb-1">Export Data</h4>
-                <p className="text-xs text-gray-600">Download aggregated results as CSV</p>
-              </div>
             </div>
 
             {files.length > 0 && (
