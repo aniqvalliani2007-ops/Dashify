@@ -99,56 +99,64 @@ export const DashboardBuilder = ({ fileRows, headers, transformConfig }) => {
   }
 
   return (
-    <div className="space-y-6 fade-in">
+    <div className="space-y-8 fade-in">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Dashboard Builder</h2>
-          <p className="text-sm text-gray-600 mt-1">Create custom visualizations by adding charts below</p>
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Dashboard Builder</h2>
+          <p className="text-base text-gray-600">Create custom visualizations by adding charts below</p>
         </div>
         <Button
           variant="primary"
           onClick={() => setShowAddPanel(true)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2.5 px-6 py-3"
+          style={{borderRadius: '2px'}}
         >
-          <Plus size={18} />
+          <Plus size={20} />
           Add Visualization
         </Button>
       </div>
 
       {/* Add Visualization Panel */}
       {showAddPanel && (
-        <div className="glass-card p-6 border-2 border-blue-200 slide-in-right">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Choose Visualization Type</h3>
-            <button onClick={() => setShowAddPanel(false)} className="text-gray-500 hover:text-gray-700">
-              <X size={20} />
+        <div className="glass-card p-8 border-2 border-blue-200 slide-in-right" style={{borderRadius: '2px'}}>
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-semibold text-gray-900">Choose Visualization Type</h3>
+            <button 
+              onClick={() => setShowAddPanel(false)} 
+              className="text-gray-500 hover:text-gray-700 p-2 hover:bg-gray-100 transition-colors"
+              style={{borderRadius: '2px'}}
+            >
+              <X size={22} />
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             <button
               onClick={() => addVisualization('bar')}
-              className="p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all group"
+              className="p-8 border-2 border-gray-200 hover:border-blue-500 hover:bg-blue-50 transition-all group"
+              style={{borderRadius: '2px'}}
             >
-              <BarChart3 size={40} className="text-blue-600 mx-auto mb-3" />
-              <h4 className="font-semibold text-gray-900 mb-1">Bar Chart</h4>
-              <p className="text-xs text-gray-600">Compare categories</p>
+              <BarChart3 size={48} className="text-blue-600 mx-auto mb-4" />
+              <h4 className="font-semibold text-gray-900 mb-2 text-base">Bar Chart</h4>
+              <p className="text-sm text-gray-600">Compare categories</p>
             </button>
             <button
               onClick={() => addVisualization('line')}
-              className="p-6 border-2 border-gray-200 rounded-lg hover:border-green-500 hover:bg-green-50 transition-all group"
+              className="p-8 border-2 border-gray-200 hover:border-green-500 hover:bg-green-50 transition-all group"
+              style={{borderRadius: '2px'}}
             >
-              <LineChartIcon size={40} className="text-green-600 mx-auto mb-3" />
-              <h4 className="font-semibold text-gray-900 mb-1">Line Chart</h4>
-              <p className="text-xs text-gray-600">Show trends over time</p>
+              <LineChartIcon size={48} className="text-green-600 mx-auto mb-4" />
+              <h4 className="font-semibold text-gray-900 mb-2 text-base">Line Chart</h4>
+              <p className="text-sm text-gray-600">Show trends over time</p>
             </button>
             <button
               onClick={() => addVisualization('pie')}
-              className="p-6 border-2 border-gray-200 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-all group"
+              className="p-8 border-2 border-gray-200 hover:border-purple-500 hover:bg-purple-50 transition-all group"
+              style={{borderRadius: '2px'}}
             >
-              <PieChartIcon size={40} className="text-purple-600 mx-auto mb-3" />
-              <h4 className="font-semibold text-gray-900 mb-1">Pie Chart</h4>
-              <p className="text-xs text-gray-600">Show proportions</p>
+              <PieChartIcon size={48} className="text-purple-600 mx-auto mb-4" />
+              <h4 className="font-semibold text-gray-900 mb-2 text-base">Pie Chart</h4>
+              <p className="text-sm text-gray-600">Show proportions</p>
             </button>
           </div>
         </div>
@@ -156,62 +164,67 @@ export const DashboardBuilder = ({ fileRows, headers, transformConfig }) => {
 
       {/* Visualizations Grid */}
       {visualizations.length === 0 ? (
-        <div className="glass-card p-16 text-center border-2 border-dashed border-gray-300">
-          <BarChart3 size={64} className="text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No Visualizations Yet</h3>
-          <p className="text-gray-600 mb-6">Click "Add Visualization" to start building your dashboard</p>
+        <div className="glass-card p-20 text-center border-2 border-dashed border-gray-300" style={{borderRadius: '2px'}}>
+          <BarChart3 size={72} className="text-gray-300 mx-auto mb-6" />
+          <h3 className="text-2xl font-semibold text-gray-900 mb-3">No Visualizations Yet</h3>
+          <p className="text-gray-600 mb-8 text-base">Click "Add Visualization" to start building your dashboard</p>
           <Button
             variant="primary"
             onClick={() => setShowAddPanel(true)}
-            className="mx-auto flex items-center gap-2"
+            className="mx-auto flex items-center gap-2.5 px-6 py-3"
+            style={{borderRadius: '2px'}}
           >
-            <Plus size={18} />
+            <Plus size={20} />
             Add Your First Chart
           </Button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           {visualizations.map((viz) => (
             <div key={viz.id} className="chart-container">
               {/* Chart Header */}
-              <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
-                <h3 className="font-semibold text-gray-900 truncate flex-1">{viz.title}</h3>
-                <div className="flex items-center gap-2">
+              <div className="flex items-center justify-between mb-5 pb-4 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900 truncate flex-1">{viz.title}</h3>
+                <div className="flex items-center gap-3">
                   <button
                     onClick={() => setEditingViz(editingViz === viz.id ? null : viz.id)}
-                    className="p-1.5 hover:bg-gray-100 rounded transition-colors"
+                    className="p-2 hover:bg-gray-100 transition-colors"
+                    style={{borderRadius: '2px'}}
                     title="Configure"
                   >
-                    <Settings size={16} className="text-gray-600" />
+                    <Settings size={18} className="text-gray-600" />
                   </button>
                   <button
                     onClick={() => removeVisualization(viz.id)}
-                    className="p-1.5 hover:bg-red-50 rounded transition-colors"
+                    className="p-2 hover:bg-red-50 transition-colors"
+                    style={{borderRadius: '2px'}}
                     title="Remove"
                   >
-                    <X size={16} className="text-red-600" />
+                    <X size={18} className="text-red-600" />
                   </button>
                 </div>
               </div>
 
               {/* Configuration Panel */}
               {editingViz === viz.id && (
-                <div className="mb-4 p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+                <div className="mb-6 p-5 bg-gray-50 border border-gray-200 space-y-4" style={{borderRadius: '2px'}}>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Chart Title</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Chart Title</label>
                     <input
                       type="text"
                       value={viz.title}
                       onChange={(e) => updateVisualization(viz.id, { title: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 text-sm"
+                      style={{borderRadius: '2px'}}
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">X-Axis (Category)</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">X-Axis (Category)</label>
                     <select
                       value={viz.xAxis}
                       onChange={(e) => updateVisualization(viz.id, { xAxis: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 text-sm"
+                      style={{borderRadius: '2px'}}
                     >
                       {visibleHeaders.map(h => (
                         <option key={h} value={h}>{h}</option>
@@ -220,11 +233,12 @@ export const DashboardBuilder = ({ fileRows, headers, transformConfig }) => {
                   </div>
                   {viz.aggregation !== 'count' && (
                     <div>
-                      <label className="block text-xs font-semibold text-gray-700 mb-1">Y-Axis (Metric)</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Y-Axis (Metric)</label>
                       <select
                         value={viz.yAxis}
                         onChange={(e) => updateVisualization(viz.id, { yAxis: e.target.value })}
-                        className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                        className="w-full px-4 py-2.5 border border-gray-300 text-sm"
+                        style={{borderRadius: '2px'}}
                       >
                         {visibleHeaders.map(h => (
                           <option key={h} value={h}>{h}</option>
@@ -233,11 +247,12 @@ export const DashboardBuilder = ({ fileRows, headers, transformConfig }) => {
                     </div>
                   )}
                   <div>
-                    <label className="block text-xs font-semibold text-gray-700 mb-1">Aggregation</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Aggregation</label>
                     <select
                       value={viz.aggregation}
                       onChange={(e) => updateVisualization(viz.id, { aggregation: e.target.value })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded text-sm"
+                      className="w-full px-4 py-2.5 border border-gray-300 text-sm"
+                      style={{borderRadius: '2px'}}
                     >
                       <option value="count">Count</option>
                       <option value="sum">Sum</option>
@@ -250,7 +265,7 @@ export const DashboardBuilder = ({ fileRows, headers, transformConfig }) => {
               )}
 
               {/* Chart */}
-              <div className="h-80 w-full">
+              <div className="h-96 w-full">
                 {viz.type === 'bar' && (
                   <BarChart data={getChartData(viz)} xAxisKey="name" yAxisKey="value" />
                 )}

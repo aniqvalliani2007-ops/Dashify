@@ -61,11 +61,11 @@ export const DashboardPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-8">
         {/* Power BI-style Search Bar */}
-        <div className="search-bar p-4">
-          <div className="flex items-center gap-3">
-            <Search size={18} className="text-gray-400" />
+        <div className="search-bar p-5">
+          <div className="flex items-center gap-4">
+            <Search size={20} className="text-gray-400" />
             <input
               type="text"
               placeholder="Ask a question about your data..."
@@ -75,10 +75,10 @@ export const DashboardPage = () => {
             />
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center gap-2 px-4 py-2 text-xs font-medium transition-colors ${
+              className={`flex items-center gap-2.5 px-5 py-2.5 text-xs font-medium transition-colors ${
                 showFilters ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
-              style={{borderRadius: '3px'}}
+              style={{borderRadius: '2px'}}
             >
               <Filter size={14} />
               Filters
@@ -87,36 +87,36 @@ export const DashboardPage = () => {
         </div>
 
         {/* Header with Actions */}
-        <div className="flex flex-col gap-6 pb-6 border-b border-gray-200">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="flex flex-col gap-8 pb-8 border-b border-gray-200">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2 flex-wrap">
-                <h2 className="text-2xl font-semibold text-gray-900" style={{letterSpacing: '-0.03em'}}>
+              <div className="flex items-center gap-4 mb-3 flex-wrap">
+                <h2 className="text-3xl font-semibold text-gray-900" style={{letterSpacing: '-0.03em'}}>
                   Analytics Studio
                 </h2>
                 {selectedFile && (
-                  <span className="badge badge-success flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="badge badge-success flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     Live
                   </span>
                 )}
               </div>
               {selectedFile && (
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
-                  <span className="flex items-center gap-2">
-                    <FileSpreadsheet size={14} className="text-blue-600 shrink-0" />
-                    <strong className="text-gray-900 truncate max-w-[200px]">{selectedFile.original_name}</strong>
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-600">
+                  <span className="flex items-center gap-2.5">
+                    <FileSpreadsheet size={16} className="text-blue-600 shrink-0" />
+                    <strong className="text-gray-900 truncate max-w-[250px]">{selectedFile.original_name}</strong>
                   </span>
-                  <span className="flex items-center gap-2">
-                    <Database size={14} className="text-gray-500 shrink-0" />
+                  <span className="flex items-center gap-2.5">
+                    <Database size={16} className="text-gray-500 shrink-0" />
                     {selectedFile.row_count?.toLocaleString() || 0} rows
                   </span>
-                  <span className="flex items-center gap-2">
-                    <Layers size={14} className="text-gray-500 shrink-0" />
+                  <span className="flex items-center gap-2.5">
+                    <Layers size={16} className="text-gray-500 shrink-0" />
                     {selectedFile.column_count || selectedFile.columns?.length || 0} columns
                   </span>
-                  <span className="flex items-center gap-2">
-                    <Calendar size={14} className="text-gray-500 shrink-0" />
+                  <span className="flex items-center gap-2.5">
+                    <Calendar size={16} className="text-gray-500 shrink-0" />
                     {new Date(selectedFile.created_at).toLocaleDateString(undefined, {
                       month: 'short',
                       day: 'numeric',
@@ -127,27 +127,27 @@ export const DashboardPage = () => {
               )}
             </div>
             
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+            <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
               {selectedFile && (
                 <>
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="flex items-center gap-2 flex-1 sm:flex-none justify-center px-4 py-2"
+                    className="flex items-center gap-2 flex-1 lg:flex-none justify-center px-5 py-2.5"
                     onClick={handleShare}
-                    style={{borderRadius: '3px'}}
+                    style={{borderRadius: '2px'}}
                   >
-                    <Share2 size={14} />
+                    <Share2 size={16} />
                     <span className="hidden sm:inline">Share</span>
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="flex items-center gap-2 flex-1 sm:flex-none justify-center px-4 py-2"
+                    className="flex items-center gap-2 flex-1 lg:flex-none justify-center px-5 py-2.5"
                     onClick={handleExportData}
-                    style={{borderRadius: '3px'}}
+                    style={{borderRadius: '2px'}}
                   >
-                    <Download size={14} />
+                    <Download size={16} />
                     <span className="hidden sm:inline">Export</span>
                   </Button>
                 </>
@@ -155,11 +155,11 @@ export const DashboardPage = () => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex items-center gap-2 flex-1 sm:flex-none justify-center px-4 py-2"
+                className="flex items-center gap-2 flex-1 lg:flex-none justify-center px-5 py-2.5"
                 onClick={() => setIsUploadOpen(true)}
-                style={{borderRadius: '3px'}}
+                style={{borderRadius: '2px'}}
               >
-                <UploadCloud size={14} />
+                <UploadCloud size={16} />
                 {selectedFile ? <span className="hidden sm:inline">Upload New</span> : <span className="hidden sm:inline">Upload CSV</span>}
                 <span className="sm:hidden">Upload</span>
               </Button>
@@ -171,40 +171,40 @@ export const DashboardPage = () => {
         {selectedFile ? (
           <>
             {/* Tab Navigation */}
-            <div className="flex items-center gap-2 border-b border-gray-200 overflow-x-auto pb-px">
+            <div className="flex items-center gap-3 border-b border-gray-200 overflow-x-auto pb-px">
               <button
                 onClick={() => setActiveTab('insights')}
-                className={`tab-button ${activeTab === 'insights' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
+                className={`tab-button ${activeTab === 'insights' ? 'active' : ''} flex items-center gap-2.5 px-6 py-4 text-sm font-medium whitespace-nowrap`}
               >
-                <BarChart3 size={16} />
+                <BarChart3 size={18} />
                 Auto Insights
               </button>
               <button
                 onClick={() => setActiveTab('builder')}
-                className={`tab-button ${activeTab === 'builder' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
+                className={`tab-button ${activeTab === 'builder' ? 'active' : ''} flex items-center gap-2.5 px-6 py-4 text-sm font-medium whitespace-nowrap`}
               >
-                <Layout size={16} />
+                <Layout size={18} />
                 Dashboard Builder
               </button>
               <button
                 onClick={() => setActiveTab('transform')}
-                className={`tab-button ${activeTab === 'transform' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
+                className={`tab-button ${activeTab === 'transform' ? 'active' : ''} flex items-center gap-2.5 px-6 py-4 text-sm font-medium whitespace-nowrap`}
               >
-                <Wand2 size={16} />
+                <Wand2 size={18} />
                 Transform
               </button>
               <button
                 onClick={() => setActiveTab('relationships')}
-                className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} flex items-center gap-2 px-4 py-3 text-sm font-medium whitespace-nowrap`}
+                className={`tab-button ${activeTab === 'relationships' ? 'active' : ''} flex items-center gap-2.5 px-6 py-4 text-sm font-medium whitespace-nowrap`}
               >
-                <TrendingUp size={16} />
+                <TrendingUp size={18} />
                 Relationships
               </button>
             </div>
 
             {/* Tab Content */}
             {isLoadingRows ? (
-              <div className="p-20 glass-card border border-gray-200 flex items-center justify-center">
+              <div className="p-24 glass-card border border-gray-200 flex items-center justify-center">
                 <Loader text="Loading data from storage..." />
               </div>
             ) : fileRows && fileRows.length > 0 ? (
@@ -241,9 +241,9 @@ export const DashboardPage = () => {
                 )}
               </>
             ) : (
-              <div className="p-12 glass-card border border-gray-200 flex items-center justify-center text-center">
-                <div className="space-y-3">
-                  <Database size={40} className="text-gray-400 mx-auto" />
+              <div className="p-16 glass-card border border-gray-200 flex items-center justify-center text-center">
+                <div className="space-y-4">
+                  <Database size={48} className="text-gray-400 mx-auto" />
                   <p className="text-gray-600 text-sm">No data rows found in the selected file.</p>
                   <p className="text-gray-500 text-xs">Please upload a valid CSV with data.</p>
                 </div>
@@ -251,9 +251,9 @@ export const DashboardPage = () => {
             )}
             
             {/* Historical list at the bottom */}
-            <div className="pt-4">
-              <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
-                <TrendingUp size={16} className="text-blue-600" />
+            <div className="pt-8">
+              <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200">
+                <TrendingUp size={18} className="text-blue-600" />
                 <h3 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Dataset History</h3>
               </div>
               <FileHistory />
@@ -261,34 +261,34 @@ export const DashboardPage = () => {
           </>
         ) : (
           /* Empty/Upload State */
-          <div className="flex flex-col items-center justify-center py-16 px-6 glass-card border-2 border-dashed border-gray-300 max-w-4xl mx-auto text-center gap-6 bg-white">
-            <div className="p-5 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 text-blue-600 rounded-lg">
-              <BarChart3 size={48} />
+          <div className="flex flex-col items-center justify-center py-20 px-8 glass-card border-2 border-dashed border-gray-300 max-w-4xl mx-auto text-center gap-8 bg-white">
+            <div className="p-6 bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 text-blue-600 rounded-lg">
+              <BarChart3 size={56} />
             </div>
             
-            <div className="space-y-3">
-              <h3 className="text-2xl font-bold text-gray-900">Welcome to Analytics Studio</h3>
-              <p className="text-gray-600 text-sm max-w-lg leading-relaxed">
+            <div className="space-y-4">
+              <h3 className="text-3xl font-bold text-gray-900">Welcome to Analytics Studio</h3>
+              <p className="text-gray-600 text-base max-w-2xl leading-relaxed">
                 Transform your CSV data into powerful visualizations and insights. Upload a dataset to get started with interactive charts, AI-powered analytics, and data exploration tools.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
               <Button
                 variant="primary"
                 onClick={() => setIsUploadOpen(true)}
-                className="flex items-center gap-2 px-6 py-3 text-sm font-medium"
+                className="flex items-center gap-2.5 px-8 py-3.5 text-base font-medium"
               >
-                <UploadCloud size={18} />
+                <UploadCloud size={20} />
                 Upload Your First Dataset
               </Button>
             </div>
 
             {files.length > 0 && (
-              <div className="w-full max-w-2xl pt-8 border-t border-gray-300 mt-6 text-left">
-                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200">
-                  <TrendingUp size={16} className="text-blue-600" />
-                  <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
+              <div className="w-full max-w-2xl pt-10 border-t border-gray-300 mt-8 text-left">
+                <div className="flex items-center gap-3 mb-6 pb-3 border-b border-gray-200">
+                  <TrendingUp size={18} className="text-blue-600" />
+                  <h4 className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
                     Your Datasets
                   </h4>
                 </div>
