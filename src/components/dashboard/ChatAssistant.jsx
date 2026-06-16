@@ -84,30 +84,77 @@ export const ChatAssistant = ({ fileRows, headers, isOpen, onClose, onToggle }) 
   const formatMessage = (text) => {
     if (!text) return null
     
-    return text.split('\n').map((line, idx) => {
+    // First, process markdown-style bold (**text**)
+    let processedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    
+    return processedText.split('\n').map((line, idx) => {
       const content = line.trim()
       
+      // Skip empty lines
+      if (content === '') return <div key={idx} className="h-2" />
+      
+      // Handle headings
       if (content.startsWith('### ')) {
-        return <h5 key={idx} className="text-xs font-bold text-gray-900 mt-2 mb-1">{content.replace('### ', '')}</h5>
-      }
-      if (content.startsWith('## ')) {
-        return <h4 key={idx} className="text-sm font-bold text-blue-700 mt-3 mb-1.5">{content.replace('## ', '')}</h4>
-      }
-      if (content.startsWith('- ') || content.startsWith('* ')) {
+        const headingText = content.replace('### ', '')
         return (
-          <li key={idx} className="ml-3 list-disc text-gray-700 mb-0.5 text-xs leading-relaxed">
-            {content.substring(2).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
-          </li>
+          <h5 key={idx} className="text-sm font-bold text-gray-900 mt-3 mb-2">
+            {headingText}
+          </h5>
         )
       }
-      if (content === '') return <div key={idx} className="h-1" />
       
+      if (content.startsWith('## ')) {
+        const headingText = content.replace('## ', '')
+        return (
+          <h4 key={idx} className="text-base font-bold text-blue-700 mt-4 mb-2 pb-1 border-b border-gray-200">
+            {headingText}
+          </h4>
+        )
+      }
+      
+      if (content.startsWith('# ')) {
+        const headingText = content.replace('# ', '')
+        return (
+          <h3 key={idx} className="text-lg font-bold text-gray-900 mt-4 mb-3">
+            {headingText}
+          </h3>
+        )
+      }
+      
+      // Handle bullet points
+      if (content.startsWith('- ') || content.startsWith('* ') || content.startsWith('• ')) {
+        const bulletText = content.substring(2).trim()
+        return (
+          <li 
+            key={idx} 
+            className="ml-4 list-disc text-gray-700 mb-1.5 text-xs leading-relaxed"
+            dangerouslySetInnerHTML={{
+              __html: bulletText
+            }}
+          />
+        )
+      }
+      
+      // Handle numbered lists
+      if (/^\d+\.\s/.test(content)) {
+        return (
+          <li 
+            key={idx} 
+            className="ml-4 list-decimal text-gray-700 mb-1.5 text-xs leading-relaxed"
+            dangerouslySetInnerHTML={{
+              __html: content.replace(/^\d+\.\s/, '')
+            }}
+          />
+        )
+      }
+      
+      // Regular paragraphs
       return (
         <p 
           key={idx} 
-          className="text-gray-700 mb-1.5 text-xs leading-relaxed"
+          className="text-gray-700 mb-2 text-xs leading-relaxed"
           dangerouslySetInnerHTML={{
-            __html: content.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+            __html: content
           }}
         />
       )
@@ -199,9 +246,9 @@ export const ChatAssistant = ({ fileRows, headers, isOpen, onClose, onToggle }) 
                   }`}
                 >
                   {message.role === 'user' ? (
-                    <p className="text-sm leading-relaxed">{message.content}</p>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                   ) : (
-                    <div className="text-sm">{formatMessage(message.content)}</div>
+                    <div className="text-sm chat-message">{formatMessage(message.content)}</div>
                   )}
                   <div className={`text-[10px] mt-1.5 ${
                     message.role === 'user' ? 'text-blue-100' : 'text-gray-400'
