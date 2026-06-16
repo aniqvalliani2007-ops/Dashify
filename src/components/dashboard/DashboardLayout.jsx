@@ -38,8 +38,8 @@ export const DashboardLayout = ({ children }) => {
           <Sidebar onCloseMobile={() => setSidebarOpen(false)} />
         </div>
 
-        {/* Main Content Area - Light gray background */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-100">
+        {/* Main Content Area - Light gray background, more compact padding */}
+        <main className="flex-1 overflow-y-auto p-3 sm:p-4 lg:p-5 bg-gray-50">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
