@@ -31,6 +31,28 @@ const pingSupabase = async (timeoutMs = 3000) => {
 
 export const authService = {
   /**
+   * Sign in with Google OAuth
+   */
+  signInWithGoogle: async () => {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase not configured. Set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in .env.local.')
+    }
+    const redirectTo = `${window.location.origin}/auth/callback`
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
+      }
+    })
+    if (error) throw error
+    return data
+  },
+
+  /**
    * Register a new user
    */
   signUp: async (email, password) => {

@@ -52,6 +52,10 @@ export const AuthProvider = ({ children }) => {
     return res
   }
 
+  const signInWithGoogle = async () => {
+    return await authService.signInWithGoogle()
+  }
+
   const signOut = async () => {
     // Clear user immediately
     setUser(null)
@@ -69,6 +73,7 @@ export const AuthProvider = ({ children }) => {
     isLoading,
     signUp,
     signIn,
+    signInWithGoogle,
     signOut
   }
 

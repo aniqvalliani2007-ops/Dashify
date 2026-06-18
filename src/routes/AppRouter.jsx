@@ -10,6 +10,7 @@ import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
 import DashboardPage from '../pages/DashboardPage'
 import NotFoundPage from '../pages/NotFoundPage'
+import AuthCallbackPage from '../pages/AuthCallbackPage'
 import ProtectedRoute from '../components/auth/ProtectedRoute'
 
 export const AppRouter = () => {
@@ -24,6 +25,7 @@ export const AppRouter = () => {
         <Route path="/admin/submissions" element={<AdminSubmissionsPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/auth/callback" element={<AuthCallbackPage />} />
         <Route 
           path="/dashboard" 
           element={
