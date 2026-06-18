@@ -45,6 +45,31 @@ export const CSVProvider = ({ children }) => {
         const rows = await chartService.getFileRows(selectedFile.id)
         console.log('Loaded rows:', rows.length)
         setFileRows(rows)
+
+        // If the loaded rows have different/better column keys than what's stored,
+        // update the selectedFile columns so the dashboard uses the correct names
+        if (rows.length > 0) {
+          const parsedKeys = Object.keys(rows[0])
+          const storedCols = selectedFile.columns || []
+          const hasGeneric = storedCols.some(c => /^Column_\d+$/.test(String(c)))
+          const keysMatchStored = storedCols.length === parsedKeys.length &&
+            storedCols.every(c => parsedKeys.includes(c))
+
+          if (!keysMatchStored && parsedKeys.length > 0) {
+            console.log('Updating selectedFile columns from parsed rows:', parsedKeys)
+            setSelectedFile(prev => ({
+              ...prev,
+              columns: parsedKeys,
+              column_count: parsedKeys.length
+            }))
+            // Also update the files list so FileHistory shows correct column count
+            setFiles(prev => prev.map(f =>
+              f.id === selectedFile.id
+                ? { ...f, columns: parsedKeys, column_count: parsedKeys.length }
+                : f
+            ))
+          }
+        }
       } catch (err) {
         console.error('Failed to load file rows:', err)
         setFileRows([])

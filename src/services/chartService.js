@@ -8,11 +8,20 @@ const shouldUseLocalFallback = () => {
 }
 
 /**
+ * Check if a columns array looks like auto-generated fallback names (Column_2, Column_3 etc.)
+ * This means the file had a title row that was misread as headers on a previous upload.
+ */
+const hasGenericColumnNames = (columns) => {
+  if (!columns || columns.length < 2) return false
+  // If more than half the columns are named Column_N, treat as bad headers
+  const genericCount = columns.filter(c => /^Column_\d+$/.test(String(c))).length
+  return genericCount > columns.length / 2
+}
+
+/**
  * Re-map row keys from what the CSV parser produced to the actual 
  * column names saved in the database (user-confirmed names).
- * 
- * Strategy: match by position only when counts match exactly.
- * If the parser produced the same names already, skip remapping.
+ * Only remaps when counts match exactly and names actually differ.
  */
 const remapRowsToStoredColumns = (rows, storedColumns) => {
   if (!rows || rows.length === 0 || !storedColumns || storedColumns.length === 0) return rows
@@ -25,7 +34,6 @@ const remapRowsToStoredColumns = (rows, storedColumns) => {
 
   // Only do positional remap when counts match exactly
   if (firstRowKeys.length === storedColumns.length) {
-    console.log('[chartService] Positional remap: parser keys →', firstRowKeys, '→ stored:', storedColumns)
     return rows.map(row => {
       const newRow = {}
       firstRowKeys.forEach((key, idx) => {
@@ -35,7 +43,7 @@ const remapRowsToStoredColumns = (rows, storedColumns) => {
     })
   }
 
-  // Count mismatch: do a best-effort name-based match first, then positional fill
+  // Count mismatch — keep original keys
   console.warn('[chartService] Column count mismatch. parsedKeys:', firstRowKeys.length, 'storedColumns:', storedColumns.length, '— keeping original keys.')
   return rows
 }
@@ -74,10 +82,26 @@ export const chartService = {
       const parsed = await csvParser.parse(fileObj)
       const rows = parsed.data || []
 
-      // Remap column keys to the names stored in the database
+      // If stored columns look like Column_2, Column_3 (bad old upload),
+      // use the freshly-parsed headers from the file instead — they are correct now.
       const storedColumns = fileData.columns || []
-      const remapped = remapRowsToStoredColumns(rows, storedColumns)
+      let finalColumns = storedColumns
 
+      if (hasGenericColumnNames(storedColumns) && parsed.meta?.fields?.length > 0) {
+        console.log('[chartService] Stored columns have generic names — using re-parsed headers from file.')
+        finalColumns = parsed.meta.fields
+        // Also update the DB record so future loads are fast
+        try {
+          await supabase
+            .from('csv_files')
+            .update({ columns: finalColumns, column_count: finalColumns.length })
+            .eq('id', fileId)
+        } catch (updateErr) {
+          console.warn('[chartService] Could not update columns in DB:', updateErr.message)
+        }
+      }
+
+      const remapped = remapRowsToStoredColumns(rows, finalColumns)
       return remapped
     } catch (err) {
       console.warn('Supabase getFileRows failed, falling back to local dev rows:', err)
