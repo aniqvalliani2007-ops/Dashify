@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { MessageSquare, Send, X, Minimize2, Maximize2, Sparkles, User, Bot } from 'lucide-react'
-import Button from '../common/Button'
-import Loader from '../common/Loader'
 import { aiService } from '../../services/aiService'
 import toast from 'react-hot-toast'
 
@@ -83,82 +81,93 @@ export const ChatAssistant = ({ fileRows, headers, isOpen, onClose, onToggle }) 
 
   const formatMessage = (text) => {
     if (!text) return null
-    
-    // First, process markdown-style bold (**text**)
-    let processedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    
-    return processedText.split('\n').map((line, idx) => {
-      const content = line.trim()
-      
-      // Skip empty lines
-      if (content === '') return <div key={idx} className="h-2" />
-      
-      // Handle headings
-      if (content.startsWith('### ')) {
-        const headingText = content.replace('### ', '')
-        return (
-          <h5 key={idx} className="text-sm font-bold text-gray-900 mt-3 mb-2">
+
+    const lines = text.split('\n')
+    const elements = []
+
+    lines.forEach((line, idx) => {
+      const raw = line.trim()
+      if (raw === '') {
+        elements.push(<div key={idx} className="h-1.5" />)
+        return
+      }
+
+      // Convert **bold** → <strong> for inline use
+      const withBold = raw.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+
+      // Headings — strip any injected HTML tags from heading text for clean display
+      if (raw.startsWith('### ')) {
+        const headingText = raw.slice(4).replace(/<[^>]+>/g, '')
+        elements.push(
+          <h5 key={idx} className="text-xs font-bold text-gray-900 mt-3 mb-1.5 uppercase tracking-wide">
             {headingText}
           </h5>
         )
+        return
       }
-      
-      if (content.startsWith('## ')) {
-        const headingText = content.replace('## ', '')
-        return (
-          <h4 key={idx} className="text-base font-bold text-blue-700 mt-4 mb-2 pb-1 border-b border-gray-200">
+      if (raw.startsWith('## ')) {
+        const headingText = raw.slice(3).replace(/<[^>]+>/g, '')
+        elements.push(
+          <h4 key={idx} className="text-sm font-bold text-blue-700 mt-4 mb-2 pb-1 border-b border-blue-100">
             {headingText}
           </h4>
         )
+        return
       }
-      
-      if (content.startsWith('# ')) {
-        const headingText = content.replace('# ', '')
-        return (
-          <h3 key={idx} className="text-lg font-bold text-gray-900 mt-4 mb-3">
+      if (raw.startsWith('# ')) {
+        const headingText = raw.slice(2).replace(/<[^>]+>/g, '')
+        elements.push(
+          <h3 key={idx} className="text-sm font-bold text-gray-900 mt-4 mb-2">
             {headingText}
           </h3>
         )
+        return
       }
-      
-      // Handle bullet points
-      if (content.startsWith('- ') || content.startsWith('* ') || content.startsWith('• ')) {
-        const bulletText = content.substring(2).trim()
-        return (
-          <li 
-            key={idx} 
-            className="ml-4 list-disc text-gray-700 mb-1.5 text-xs leading-relaxed"
-            dangerouslySetInnerHTML={{
-              __html: bulletText
-            }}
-          />
+
+      // Bullet points (-, *, •)
+      if (raw.startsWith('- ') || raw.startsWith('* ') || raw.startsWith('• ')) {
+        const bulletContent = raw.slice(2).trim()
+        const bulletHtml = bulletContent.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+        elements.push(
+          <div key={idx} className="flex items-start gap-2 mb-1">
+            <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0" />
+            <span
+              className="text-xs text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: bulletHtml }}
+            />
+          </div>
         )
+        return
       }
-      
-      // Handle numbered lists
-      if (/^\d+\.\s/.test(content)) {
-        return (
-          <li 
-            key={idx} 
-            className="ml-4 list-decimal text-gray-700 mb-1.5 text-xs leading-relaxed"
-            dangerouslySetInnerHTML={{
-              __html: content.replace(/^\d+\.\s/, '')
-            }}
-          />
+
+      // Numbered lists
+      if (/^\d+\.\s/.test(raw)) {
+        const num = raw.match(/^(\d+)\./)[1]
+        const content = raw.replace(/^\d+\.\s/, '')
+        const contentHtml = content.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
+        elements.push(
+          <div key={idx} className="flex items-start gap-2 mb-1">
+            <span className="mt-0.5 text-[10px] font-bold text-blue-600 flex-shrink-0 w-4">{num}.</span>
+            <span
+              className="text-xs text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: contentHtml }}
+            />
+          </div>
         )
+        return
       }
-      
-      // Regular paragraphs
-      return (
-        <p 
-          key={idx} 
-          className="text-gray-700 mb-2 text-xs leading-relaxed"
-          dangerouslySetInnerHTML={{
-            __html: content
-          }}
+
+      // Regular paragraph
+      elements.push(
+        <p
+          key={idx}
+          className="text-xs text-gray-700 leading-relaxed mb-1.5"
+          dangerouslySetInnerHTML={{ __html: withBold }}
         />
       )
     })
+
+    return <div className="space-y-0.5">{elements}</div>
   }
 
   const clearChat = () => {

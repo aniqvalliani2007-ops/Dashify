@@ -13,7 +13,7 @@ export const aiService = {
     }
 
     if (!columns || columns.length === 0) {
-      throw new Error('No columns provided for AI analysis')
+      throw new Error('No columns provided for AI analysis. Please upload a CSV file first.')
     }
 
     const systemPrompt = `You are a professional Senior Data Analyst assistant for "Dashify".

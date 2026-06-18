@@ -14,7 +14,8 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
 
   // Apply transformations to data
   const transformedData = useMemo(() => {
-    if (!fileRows || !transformConfig) return fileRows
+    if (!fileRows) return []
+    if (!transformConfig) return fileRows
 
     let data = [...fileRows]
 
@@ -33,34 +34,49 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
   }, [fileRows, transformConfig])
 
   const visibleHeaders = useMemo(() => {
-    if (!headers || !transformConfig || !transformConfig.hiddenColumns) return headers
-    return headers.filter(h => !transformConfig.hiddenColumns.includes(h))
+    const safeHeaders = headers || []
+    if (!transformConfig || !transformConfig.hiddenColumns || transformConfig.hiddenColumns.length === 0) {
+      return safeHeaders
+    }
+    return safeHeaders.filter(h => !transformConfig.hiddenColumns.includes(h))
   }, [headers, transformConfig])
 
   // Detect best columns for visualization
   const bestColumns = useMemo(() => {
-    if (!transformedData || transformedData.length === 0 || !visibleHeaders) return null
+    if (!transformedData || transformedData.length === 0 || !visibleHeaders || visibleHeaders.length === 0) return null
 
-    // Find categorical column (for X-axis)
+    // Find categorical column (for X-axis) — low-to-medium cardinality, non-numeric
     const categoricalCol = visibleHeaders.find(h => {
       const sample = transformedData.slice(0, 50).map(row => row[h])
-      const unique = new Set(sample.filter(v => v !== null && v !== undefined && v !== ''))
-      return unique.size > 1 && unique.size < transformedData.length * 0.7
+      const nonNull = sample.filter(v => v !== null && v !== undefined && v !== '')
+      if (nonNull.length === 0) return false
+      const unique = new Set(nonNull.map(v => String(v)))
+      // Categorical: more than 1 unique value, less than 70% of dataset, and not all numeric
+      const isNotAllNumeric = nonNull.some(v => isNaN(Number(String(v).replace(/[^0-9.-]/g, ''))) || String(v).trim() === '')
+      return unique.size > 1 && unique.size < transformedData.length * 0.7 && isNotAllNumeric
     })
 
-    // Find numeric columns (for Y-axis)
+    // Find numeric columns — must have at least one actual number, not all nulls
     const numericCols = visibleHeaders.filter(h => {
       const sample = transformedData.slice(0, 100).map(row => row[h])
-      return sample.every(val => {
-        if (val === null || val === undefined || val === '') return true
+      const nonNull = sample.filter(v => v !== null && v !== undefined && v !== '')
+      if (nonNull.length === 0) return false // skip all-null columns
+      return nonNull.every(val => {
         const cleaned = String(val).replace(/[^0-9.-]/g, '')
         return cleaned !== '' && !isNaN(Number(cleaned))
       })
     })
 
+    // Prefer a numeric col that is NOT the same as categorical
+    const bestNumeric = numericCols.find(c => c !== (categoricalCol || visibleHeaders[0]))
+      || numericCols[0]
+      || visibleHeaders.find(h => h !== (categoricalCol || visibleHeaders[0]))
+      || visibleHeaders[1]
+      || visibleHeaders[0]
+
     return {
       categorical: categoricalCol || visibleHeaders[0],
-      numeric: numericCols.length > 0 ? numericCols[0] : visibleHeaders[1] || visibleHeaders[0]
+      numeric: bestNumeric || visibleHeaders[0]
     }
   }, [transformedData, visibleHeaders])
 

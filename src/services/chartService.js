@@ -7,6 +7,39 @@ const shouldUseLocalFallback = () => {
   return (import.meta.env.DEV && !isSupabaseConfigured) || isSupabaseOffline
 }
 
+/**
+ * Re-map row keys from what the CSV parser produced to the actual 
+ * column names saved in the database (user-confirmed names).
+ * 
+ * Strategy: match by position only when counts match exactly.
+ * If the parser produced the same names already, skip remapping.
+ */
+const remapRowsToStoredColumns = (rows, storedColumns) => {
+  if (!rows || rows.length === 0 || !storedColumns || storedColumns.length === 0) return rows
+
+  const firstRowKeys = Object.keys(rows[0])
+
+  // If every stored column already exists as a key, no remapping needed
+  const allMatch = storedColumns.every(col => firstRowKeys.includes(col))
+  if (allMatch) return rows
+
+  // Only do positional remap when counts match exactly
+  if (firstRowKeys.length === storedColumns.length) {
+    console.log('[chartService] Positional remap: parser keys →', firstRowKeys, '→ stored:', storedColumns)
+    return rows.map(row => {
+      const newRow = {}
+      firstRowKeys.forEach((key, idx) => {
+        newRow[storedColumns[idx]] = row[key]
+      })
+      return newRow
+    })
+  }
+
+  // Count mismatch: do a best-effort name-based match first, then positional fill
+  console.warn('[chartService] Column count mismatch. parsedKeys:', firstRowKeys.length, 'storedColumns:', storedColumns.length, '— keeping original keys.')
+  return rows
+}
+
 export const chartService = {
   /**
    * Fetch all records of a specific CSV file by downloading from Supabase Storage
@@ -17,9 +50,10 @@ export const chartService = {
     }
 
     try {
+      // Fetch both the file path AND the stored column names
       const { data: fileData, error: fileError } = await supabase
         .from('csv_files')
-        .select('file_path')
+        .select('file_path, columns')
         .eq('id', fileId)
         .single()
 
@@ -38,7 +72,13 @@ export const chartService = {
 
       const fileObj = new File([storageBlob], fileData.file_path, { type: storageBlob.type })
       const parsed = await csvParser.parse(fileObj)
-      return parsed.data || []
+      const rows = parsed.data || []
+
+      // Remap column keys to the names stored in the database
+      const storedColumns = fileData.columns || []
+      const remapped = remapRowsToStoredColumns(rows, storedColumns)
+
+      return remapped
     } catch (err) {
       console.warn('Supabase getFileRows failed, falling back to local dev rows:', err)
       if (err.message.includes('timeout') || err.message.includes('fetch') || err.message.includes('network')) {

@@ -48,11 +48,20 @@ const parseExcel = (file, previewRows = null) => {
           })
         }
         
-        // Extract and clean headers
+        // Extract and clean headers — preserve original names, deduplicate if needed
         const rawFields = rows[0] || []
+        const seenNames = {}
         const fields = rawFields.map((h, i) => {
-          const trimmed = String(h || '').trim()
-          return trimmed || `Column_${i + 1}`
+          let name = String(h || '').trim().replace(/^\uFEFF/, '') // strip BOM
+          if (!name) name = `Column_${i + 1}`
+          // Deduplicate
+          if (seenNames[name] !== undefined) {
+            seenNames[name]++
+            name = `${name}_${seenNames[name]}`
+          } else {
+            seenNames[name] = 0
+          }
+          return name
         })
         
         // Filter out empty rows
@@ -120,6 +129,13 @@ export const csvParser = {
         header: true,
         skipEmptyLines: true,
         dynamicTyping: true,
+        transformHeader: (header, index) => {
+          // Strip BOM, trim whitespace, preserve original names
+          let name = String(header || '').replace(/^\uFEFF/, '').trim()
+          // Empty headers get a fallback name
+          if (!name) name = `Column_${index + 1}`
+          return name
+        },
         complete: (results) => {
           resolve(results)
         },
@@ -145,7 +161,13 @@ export const csvParser = {
       Papa.parse(file, {
         header: true,
         skipEmptyLines: true,
+        dynamicTyping: true,
         preview: previewRows,
+        transformHeader: (header, index) => {
+          let name = String(header || '').replace(/^\uFEFF/, '').trim()
+          if (!name) name = `Column_${index + 1}`
+          return name
+        },
         complete: (results) => {
           resolve(results)
         },

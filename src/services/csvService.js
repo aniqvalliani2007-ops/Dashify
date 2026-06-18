@@ -25,7 +25,22 @@ const validateHeaders = (headers) => {
   if (!headers || !Array.isArray(headers) || headers.length === 0) {
     throw new Error('CSV file has no headers or columns detected')
   }
-  return headers.map(h => String(h).trim()).filter(h => h.length > 0)
+  const seenNames = {}
+  return headers
+    .map((h, i) => {
+      // Strip BOM, trim whitespace
+      let name = String(h).replace(/^\uFEFF/, '').trim()
+      if (!name) name = `Column_${i + 1}`
+      // Deduplicate
+      if (seenNames[name] !== undefined) {
+        seenNames[name]++
+        name = `${name}_${seenNames[name]}`
+      } else {
+        seenNames[name] = 0
+      }
+      return name
+    })
+    .filter(h => h.length > 0)
 }
 
 const getLocalJson = (key) => {
@@ -138,8 +153,22 @@ export const csvService = {
     if (records.length === 0) {
       throw new Error('CSV file is empty - no data rows found')
     }
+
+    // Remap parsed row keys to match the validated/mapped headers
+    const parsedKeys = parsed.meta?.fields || Object.keys(records[0] || {})
+    let remappedRecords = records
+    if (parsedKeys.length === validatedHeaders.length) {
+      // Remap row keys to the user-confirmed column names
+      remappedRecords = records.map(row => {
+        const newRow = {}
+        parsedKeys.forEach((key, idx) => {
+          newRow[validatedHeaders[idx]] = row[key]
+        })
+        return newRow
+      })
+    }
     
-    const sample = records.slice(0, 5)
+    const sample = remappedRecords.slice(0, 5)
     const fileExt = file.name.split('.').pop().toLowerCase()
     const fileName = `${userId}/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`
     const filePath = `${fileName}`
@@ -154,7 +183,7 @@ export const csvService = {
         file_size: file.size,
         file_path: filePath,
         mime_type: file.type || 'text/csv',
-        row_count: records.length,
+        row_count: remappedRecords.length,
         column_count: validatedHeaders.length,
         columns: validatedHeaders,
         data_sample: sample,
@@ -163,7 +192,7 @@ export const csvService = {
         updated_at: new Date().toISOString()
       }
       saveLocalCsvFile(fileRecord)
-      saveLocalCsvRows(fileRecord.id, records)
+      saveLocalCsvRows(fileRecord.id, remappedRecords)
       return fileRecord
     }
 
