@@ -87,31 +87,65 @@ input:focus, select:focus, textarea:focus {
   border-color: #3b82f6;
 }
 
-/* Dark sidebar */
-.sidebar-dark {
-  background: linear-gradient(180deg, #1a202c 0%, #111827 100%);
-  color: #f9fafb;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
+/* Glassy Sidebar - Modern light design */
+.sidebar-glassy {
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.95) 0%, 
+    rgba(249, 250, 251, 0.98) 50%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  border-right: 1px solid rgba(229, 231, 235, 0.5);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.03);
 }
 
-.sidebar-item {
-  color: #9ca3af;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 2px;
-  font-size: 0.875rem;
-  font-weight: 500;
+.sidebar-glassy-item {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(229, 231, 235, 0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
 }
 
-.sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #f9fafb;
+.sidebar-glassy-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.03) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
 }
 
-.sidebar-item.active {
-  background: rgba(59, 130, 246, 0.1);
-  color: #60a5fa;
-  border-left: 2px solid #3b82f6;
-  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.1);
+.sidebar-glassy-item:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08), 0 0 0 1px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.sidebar-glassy-item:hover::before {
+  opacity: 1;
+}
+
+.sidebar-glassy-item.active {
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.12) 0%, 
+    rgba(147, 51, 234, 0.08) 100%
+  );
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.15), 
+              inset 0 0 0 1px rgba(59, 130, 246, 0.2),
+              0 0 20px rgba(59, 130, 246, 0.1);
+  transform: translateX(2px);
+}
+
+.sidebar-glassy-item.active::before {
+  opacity: 0;
 }
 
 /* Metric card - More compact */
