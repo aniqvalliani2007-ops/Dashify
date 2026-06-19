@@ -45,19 +45,45 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
   const bestColumns = useMemo(() => {
     if (!transformedData || transformedData.length === 0 || !visibleHeaders || visibleHeaders.length === 0) return null
 
+    // Helper to check if a header looks like an ID or Date
+    const isIdOrDateColumn = (name) => {
+      const lower = String(name).toLowerCase()
+      return lower.includes('id') || lower.endsWith('id') ||
+             lower.includes('date') || lower.includes('time') || 
+             lower.includes('year') || lower.includes('month') || 
+             lower.includes('day') || lower.includes('timestamp') ||
+             lower.includes('created') || lower.includes('updated')
+    }
+
     // Find categorical column (for X-axis) — low-to-medium cardinality, non-numeric
-    const categoricalCol = visibleHeaders.find(h => {
+    // We prefer non-ID/non-date columns for categorical if possible
+    let categoricalCol = visibleHeaders.find(h => {
       const sample = transformedData.slice(0, 50).map(row => row[h])
       const nonNull = sample.filter(v => v !== null && v !== undefined && v !== '')
       if (nonNull.length === 0) return false
       const unique = new Set(nonNull.map(v => String(v)))
-      // Categorical: more than 1 unique value, less than 70% of dataset, and not all numeric
+      
+      // Exclude IDs/Dates from primary categorical if we want a good one
+      if (isIdOrDateColumn(h)) return false
+
       const isNotAllNumeric = nonNull.some(v => isNaN(Number(String(v).replace(/[^0-9.-]/g, ''))) || String(v).trim() === '')
       return unique.size > 1 && unique.size < transformedData.length * 0.7 && isNotAllNumeric
     })
 
+    // If no good non-ID/non-date categorical column, try any categorical
+    if (!categoricalCol) {
+      categoricalCol = visibleHeaders.find(h => {
+        const sample = transformedData.slice(0, 50).map(row => row[h])
+        const nonNull = sample.filter(v => v !== null && v !== undefined && v !== '')
+        if (nonNull.length === 0) return false
+        const unique = new Set(nonNull.map(v => String(v)))
+        const isNotAllNumeric = nonNull.some(v => isNaN(Number(String(v).replace(/[^0-9.-]/g, ''))) || String(v).trim() === '')
+        return unique.size > 1 && unique.size < transformedData.length * 0.8 && isNotAllNumeric
+      })
+    }
+
     // Find numeric columns — must have at least one actual number, not all nulls
-    const numericCols = visibleHeaders.filter(h => {
+    const allNumericCols = visibleHeaders.filter(h => {
       const sample = transformedData.slice(0, 100).map(row => row[h])
       const nonNull = sample.filter(v => v !== null && v !== undefined && v !== '')
       if (nonNull.length === 0) return false // skip all-null columns
@@ -67,15 +93,24 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
       })
     })
 
-    // Prefer a numeric col that is NOT the same as categorical
-    const bestNumeric = numericCols.find(c => c !== (categoricalCol || visibleHeaders[0]))
-      || numericCols[0]
+    // Filter out ID and Date columns for bestNumeric selection if possible
+    const preferredNumericCols = allNumericCols.filter(h => !isIdOrDateColumn(h))
+
+    // Prefer preferred numeric col that is NOT the same as categorical
+    const bestNumeric = preferredNumericCols.find(c => c !== (categoricalCol || visibleHeaders[0]))
+      || preferredNumericCols[0]
+      || allNumericCols.find(c => c !== (categoricalCol || visibleHeaders[0]))
+      || allNumericCols[0]
+      || visibleHeaders.find(h => h !== (categoricalCol || visibleHeaders[0]) && !isIdOrDateColumn(h))
       || visibleHeaders.find(h => h !== (categoricalCol || visibleHeaders[0]))
       || visibleHeaders[1]
       || visibleHeaders[0]
 
+    // For categorical fallback: we should avoid Order_ID/dates if possible, or use the next best
+    const fallbackCategorical = visibleHeaders.find(h => !isIdOrDateColumn(h)) || visibleHeaders[0]
+
     return {
-      categorical: categoricalCol || visibleHeaders[0],
+      categorical: categoricalCol || fallbackCategorical,
       numeric: bestNumeric || visibleHeaders[0]
     }
   }, [transformedData, visibleHeaders])
@@ -257,38 +292,49 @@ export const PowerBIDashboard = ({ fileRows, headers, transformConfig }) => {
         </div>
 
         {/* Visualizations Grid - More compact, better spacing */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {dashboardData.map((viz, idx) => (
-            <div key={idx} className="bg-white border border-gray-200 rounded p-4 flex flex-col" style={{minHeight: '320px'}}>
-              <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-100">
-                <h3 className="text-sm font-semibold text-gray-900 truncate pr-2">
-                  {viz.title}
-                </h3>
-                <div className={`p-1.5 rounded ${
-                  viz.type === 'bar' ? 'bg-blue-50 text-blue-600' :
-                  viz.type === 'line' ? 'bg-green-50 text-green-600' :
-                  'bg-purple-50 text-purple-600'
-                }`}>
-                  {viz.type === 'bar' && <BarChart3 size={14} />}
-                  {viz.type === 'line' && <Activity size={14} />}
-                  {viz.type === 'pie' && <PieChartIcon size={14} />}
+        {dashboardData.length === 0 ? (
+          <div className="bg-yellow-50 border border-yellow-200 rounded p-6 text-center text-yellow-800">
+            <TrendingUp size={32} className="text-yellow-500 mx-auto mb-2" />
+            <p className="font-semibold text-sm">Could not generate automated charts</p>
+            <p className="text-xs mt-1 text-yellow-600">
+              The imported columns do not contain suitable dimensions (categorical data) and measures (numeric data) to auto-generate charts. 
+              Please ensure your file has at least one category column and one numeric column.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {dashboardData.map((viz, idx) => (
+              <div key={idx} className="bg-white border border-gray-200 rounded p-4 flex flex-col" style={{minHeight: '320px'}}>
+                <div className="flex items-center justify-between mb-3 pb-2 border-b border-gray-100">
+                  <h3 className="text-sm font-semibold text-gray-900 truncate pr-2">
+                    {viz.title}
+                  </h3>
+                  <div className={`p-1.5 rounded ${
+                    viz.type === 'bar' ? 'bg-blue-50 text-blue-600' :
+                    viz.type === 'line' ? 'bg-green-50 text-green-600' :
+                    'bg-purple-50 text-purple-600'
+                  }`}>
+                    {viz.type === 'bar' && <BarChart3 size={14} />}
+                    {viz.type === 'line' && <Activity size={14} />}
+                    {viz.type === 'pie' && <PieChartIcon size={14} />}
+                  </div>
+                </div>
+
+                <div className="flex-1 min-h-0 w-full">
+                  {viz.type === 'bar' && (
+                    <BarChart data={viz.data} xAxisKey="name" yAxisKey="value" />
+                  )}
+                  {viz.type === 'line' && (
+                    <LineChart data={viz.data} xAxisKey="name" yAxisKey="value" />
+                  )}
+                  {viz.type === 'pie' && (
+                    <PieChart data={viz.data} />
+                  )}
                 </div>
               </div>
-
-              <div className="flex-1 min-h-0 w-full">
-                {viz.type === 'bar' && (
-                  <BarChart data={viz.data} xAxisKey="name" yAxisKey="value" />
-                )}
-                {viz.type === 'line' && (
-                  <LineChart data={viz.data} xAxisKey="name" yAxisKey="value" />
-                )}
-                {viz.type === 'pie' && (
-                  <PieChart data={viz.data} />
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Data Insights - Compact */}
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded p-4">

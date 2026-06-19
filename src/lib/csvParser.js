@@ -2,6 +2,33 @@ import Papa from 'papaparse'
 import * as XLSX from 'xlsx'
 
 /**
+ * Check if the column header name indicates a date/time column
+ */
+const isDateColumnHeader = (name) => {
+  if (!name) return false
+  const lower = String(name).toLowerCase()
+  return lower.includes('date') || lower.includes('time') || lower.includes('year') || lower.includes('month') || lower.includes('day') || lower.includes('created') || lower.includes('updated') || lower.includes('timestamp')
+}
+
+/**
+ * Convert Excel date serial number to YYYY-MM-DD formatted string
+ */
+const excelSerialToDate = (serial) => {
+  if (!serial || isNaN(Number(serial))) return serial
+  // Excel base date is Dec 30, 1899 (due to leap year bug in 1900)
+  const utcDays = Math.floor(serial - 25569)
+  const utcValue = utcDays * 86400 * 1000
+  const dateObj = new Date(utcValue)
+  
+  if (isNaN(dateObj.getTime())) return serial
+  
+  const yyyy = dateObj.getFullYear()
+  const mm = String(dateObj.getMonth() + 1).padStart(2, '0')
+  const dd = String(dateObj.getDate()).padStart(2, '0')
+  return `${yyyy}-${mm}-${dd}`
+}
+
+/**
  * Check if the given file is an Excel spreadsheet based on its name or type
  */
 const isExcelFile = (file) => {
@@ -57,10 +84,27 @@ const buildObjects = (rows, fields) =>
     fields.forEach((field, index) => {
       let val = row[index]
       if (val !== undefined && val !== null && val !== '') {
-        if (typeof val === 'string') {
+        if (val instanceof Date) {
+          const yyyy = val.getFullYear()
+          const mm = String(val.getMonth() + 1).padStart(2, '0')
+          const dd = String(val.getDate()).padStart(2, '0')
+          val = `${yyyy}-${mm}-${dd}`
+        } else if (typeof val === 'string') {
           const trimmed = val.trim()
-          if (trimmed !== '' && !isNaN(Number(trimmed))) val = Number(trimmed)
-          else val = trimmed === '' ? null : trimmed
+          if (trimmed !== '' && !isNaN(Number(trimmed))) {
+            const num = Number(trimmed)
+            if (isDateColumnHeader(field) && num > 20000 && num < 60000) {
+              val = excelSerialToDate(num)
+            } else {
+              val = num
+            }
+          } else {
+            val = trimmed === '' ? null : trimmed
+          }
+        } else if (typeof val === 'number') {
+          if (isDateColumnHeader(field) && val > 20000 && val < 60000) {
+            val = excelSerialToDate(val)
+          }
         }
       } else {
         val = null
@@ -85,7 +129,7 @@ const parseExcel = (file, previewRows = null) => {
         if (!sheetName) return reject(new Error('Excel file has no sheets'))
 
         const worksheet = workbook.Sheets[sheetName]
-        const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' })
+        const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '', cellDates: true })
 
         if (rows.length === 0) {
           return resolve({ data: [], meta: { fields: [] }, errors: [] })
@@ -157,15 +201,33 @@ const parseCsvWithAutoHeaderDetect = (file, previewRows = null) => {
             const obj = {}
             fields.forEach((field, index) => {
               let val = row[index] ?? null
-              if (typeof val === 'string') {
-                const trimmed = val.trim()
-                if (trimmed === '') {
-                  val = null
-                } else if (!isNaN(Number(trimmed)) && trimmed !== '') {
-                  val = Number(trimmed)
-                } else {
-                  val = trimmed
+              if (val !== undefined && val !== null && val !== '') {
+                if (val instanceof Date) {
+                  const yyyy = val.getFullYear()
+                  const mm = String(val.getMonth() + 1).padStart(2, '0')
+                  const dd = String(val.getDate()).padStart(2, '0')
+                  val = `${yyyy}-${mm}-${dd}`
+                } else if (typeof val === 'string') {
+                  const trimmed = val.trim()
+                  if (trimmed === '') {
+                    val = null
+                  } else if (!isNaN(Number(trimmed)) && trimmed !== '') {
+                    const num = Number(trimmed)
+                    if (isDateColumnHeader(field) && num > 20000 && num < 60000) {
+                      val = excelSerialToDate(num)
+                    } else {
+                      val = num
+                    }
+                  } else {
+                    val = trimmed
+                  }
+                } else if (typeof val === 'number') {
+                  if (isDateColumnHeader(field) && val > 20000 && val < 60000) {
+                    val = excelSerialToDate(val)
+                  }
                 }
+              } else {
+                val = null
               }
               obj[field] = val
             })
