@@ -146,5 +146,61 @@ export const authService = {
     }
 
     return { ...user, profile }
+  },
+
+  /**
+   * Get user subscription status
+   */
+  getUserSubscription: async (userId) => {
+    if (!isSupabaseConfigured) {
+      // Dev fallback
+      if (import.meta.env.DEV) {
+        return {
+          subscription_tier: 'free',
+          csv_upload_count: 0,
+          csv_upload_limit: 3
+        }
+      }
+      throw new Error('Supabase not configured')
+    }
+
+    const { data, error } = await supabase
+      .from('users')
+      .select('subscription_tier, csv_upload_count, csv_upload_limit, subscription_started_at, subscription_expires_at')
+      .eq('id', userId)
+      .single()
+
+    if (error) {
+      console.error('Error fetching subscription:', error)
+      // Fallback to free tier
+      return {
+        subscription_tier: 'free',
+        csv_upload_count: 0,
+        csv_upload_limit: 3
+      }
+    }
+
+    return data
+  },
+
+  /**
+   * Check if user can upload more files
+   */
+  canUploadCSV: async (userId) => {
+    if (!isSupabaseConfigured) {
+      if (import.meta.env.DEV) {
+        return true
+      }
+      throw new Error('Supabase not configured')
+    }
+
+    const { data, error } = await supabase.rpc('can_upload_csv', { user_uuid: userId })
+
+    if (error) {
+      console.error('Error checking upload permission:', error)
+      return false
+    }
+
+    return data
   }
 }

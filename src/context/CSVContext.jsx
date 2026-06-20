@@ -1,12 +1,14 @@
 import React, { createContext, useState, useEffect, useContext, useRef } from 'react'
 import { csvService } from '../services/csvService'
 import { chartService } from '../services/chartService'
+import { authService } from '../services/authService'
+import { isSupabaseConfigured } from '../lib/supabaseClient'
 import { AuthContext } from './AuthContext'
 
 export const CSVContext = createContext()
 
 export const CSVProvider = ({ children }) => {
-  const { user } = useContext(AuthContext)
+  const { user, refreshSubscription } = useContext(AuthContext)
   const [files, setFiles] = useState([])
   const [selectedFile, setSelectedFile] = useState(null)
   const [fileRows, setFileRows] = useState([])
@@ -105,6 +107,14 @@ export const CSVProvider = ({ children }) => {
   }
 
   const uploadFile = async (file, headers, userId) => {
+    // Check upload limits before proceeding
+    if (isSupabaseConfigured) {
+      const canUpload = await authService.canUploadCSV(userId)
+      if (!canUpload) {
+        throw new Error('Upload limit reached. Please upgrade to Pro for unlimited uploads.')
+      }
+    }
+    
     const record = await csvService.uploadAndProcessCSV(file, headers, userId)
     
     // Add the new file to the files list at the beginning
@@ -112,6 +122,11 @@ export const CSVProvider = ({ children }) => {
     
     // Auto select newly uploaded file
     setSelectedFile(record)
+    
+    // Refresh subscription count
+    if (refreshSubscription) {
+      await refreshSubscription()
+    }
     
     return record
   }
@@ -135,6 +150,10 @@ export const CSVProvider = ({ children }) => {
     // Then delete from backend
     try {
       await csvService.deleteFile(fileId, filePath)
+      // Refresh subscription count after deletion
+      if (refreshSubscription) {
+        await refreshSubscription()
+      }
     } catch (err) {
       // If delete fails, restore the file
       console.error('Failed to delete file:', err)

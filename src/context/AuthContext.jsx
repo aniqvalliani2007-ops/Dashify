@@ -7,6 +7,33 @@ export const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [subscription, setSubscription] = useState({
+    subscription_tier: 'free',
+    csv_upload_count: 0,
+    csv_upload_limit: 3
+  })
+
+  // Fetch subscription data when user changes
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      if (user?.id && isSupabaseConfigured) {
+        try {
+          const subData = await authService.getUserSubscription(user.id)
+          setSubscription(subData)
+        } catch (err) {
+          console.error('Failed to fetch subscription:', err)
+        }
+      } else if (!user) {
+        // Reset to default free tier when logged out
+        setSubscription({
+          subscription_tier: 'free',
+          csv_upload_count: 0,
+          csv_upload_limit: 3
+        })
+      }
+    }
+    fetchSubscription()
+  }, [user?.id])
 
   // Listen to Supabase auth changes and handle initial session
   useEffect(() => {
@@ -68,9 +95,22 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const refreshSubscription = async () => {
+    if (user?.id && isSupabaseConfigured) {
+      try {
+        const subData = await authService.getUserSubscription(user.id)
+        setSubscription(subData)
+      } catch (err) {
+        console.error('Failed to refresh subscription:', err)
+      }
+    }
+  }
+
   const value = {
     user,
     isLoading,
+    subscription,
+    refreshSubscription,
     signUp,
     signIn,
     signInWithGoogle,

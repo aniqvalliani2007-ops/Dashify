@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useCSV } from '../hooks/useCSV'
+import { useAuth } from '../hooks/useAuth'
 import DashboardLayout from '../components/dashboard/DashboardLayout'
 import PowerBIDashboard from '../components/dashboard/PowerBIDashboard'
 import DashboardBuilder from '../components/dashboard/DashboardBuilder'
@@ -9,11 +11,13 @@ import FileHistory from '../components/dashboard/FileHistory'
 import CSVUploader from '../components/csv/CSVUploader'
 import Modal from '../components/common/Modal'
 import Loader from '../components/common/Loader'
-import { FileSpreadsheet, Layers, Calendar, BarChart3, Database, UploadCloud, Search, Share2, Download, Filter, TrendingUp, Wand2, Layout } from 'lucide-react'
+import { FileSpreadsheet, Layers, Calendar, BarChart3, Database, UploadCloud, Search, Share2, Download, Filter, TrendingUp, Wand2, Layout, Crown, X } from 'lucide-react'
 import Button from '../components/common/Button'
 import toast from 'react-hot-toast'
 
 export const DashboardPage = () => {
+  const navigate = useNavigate()
+  const { subscription } = useAuth()
   const {
     selectedFile,
     fileRows,
@@ -27,6 +31,12 @@ export const DashboardPage = () => {
   const [showFilters, setShowFilters] = useState(false)
   const [activeTab, setActiveTab] = useState('insights') // insights, builder, transform, relationships
   const [transformConfig, setTransformConfig] = useState(null)
+  const [showUpgradeBanner, setShowUpgradeBanner] = useState(true)
+
+  const tier = subscription?.subscription_tier || 'free'
+  const uploadCount = subscription?.csv_upload_count || 0
+  const uploadLimit = subscription?.csv_upload_limit || 3
+  const showUpgradePrompt = tier === 'free' && uploadCount >= 2 && showUpgradeBanner
 
   const handleExportData = () => {
     if (!selectedFile || !fileRows || fileRows.length === 0) {
@@ -62,6 +72,43 @@ export const DashboardPage = () => {
   return (
     <DashboardLayout>
       <div className="space-y-4">
+        {/* Upgrade Banner - Show when user is near limit */}
+        {showUpgradePrompt && (
+          <div className="upgrade-banner relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 opacity-10"></div>
+            <div className="relative flex items-center justify-between gap-4 p-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="p-2.5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg shadow-lg shrink-0">
+                  <Crown size={20} className="text-white" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-bold text-gray-900 mb-0.5">
+                    You're almost at your free tier limit!
+                  </h3>
+                  <p className="text-xs text-gray-600">
+                    Upgrade to Pro for unlimited CSV uploads, advanced features, and priority support.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <Button
+                  onClick={() => navigate('/pricing')}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-xs font-semibold shadow-lg hover:shadow-xl transition-all duration-300 whitespace-nowrap"
+                >
+                  Upgrade Now
+                </Button>
+                <button
+                  onClick={() => setShowUpgradeBanner(false)}
+                  className="p-1.5 hover:bg-gray-100 rounded-md transition-colors text-gray-400 hover:text-gray-600"
+                  aria-label="Dismiss"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Power BI-style Search Bar - More compact */}
         <div className="search-bar p-3">
           <div className="flex items-center gap-2">
