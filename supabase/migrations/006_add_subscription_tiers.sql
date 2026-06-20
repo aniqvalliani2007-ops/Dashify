@@ -39,23 +39,12 @@ begin
 end;
 $$ language plpgsql security definer;
 
--- Function to increment upload count
+-- Function to increment upload count (only increments, never decrements)
 create or replace function public.increment_csv_upload_count(user_uuid uuid)
 returns void as $$
 begin
   update public.users
   set csv_upload_count = csv_upload_count + 1,
-      updated_at = now()
-  where id = user_uuid;
-end;
-$$ language plpgsql security definer;
-
--- Function to decrement upload count when file is deleted
-create or replace function public.decrement_csv_upload_count(user_uuid uuid)
-returns void as $$
-begin
-  update public.users
-  set csv_upload_count = greatest(0, csv_upload_count - 1),
       updated_at = now()
   where id = user_uuid;
 end;
@@ -73,19 +62,6 @@ $$ language plpgsql security definer;
 create or replace trigger on_csv_file_uploaded
   after insert on public.csv_files
   for each row execute procedure public.handle_csv_upload();
-
--- Trigger to auto-decrement count when CSV file is deleted
-create or replace function public.handle_csv_delete()
-returns trigger as $$
-begin
-  perform public.decrement_csv_upload_count(old.user_id);
-  return old;
-end;
-$$ language plpgsql security definer;
-
-create or replace trigger on_csv_file_deleted
-  after delete on public.csv_files
-  for each row execute procedure public.handle_csv_delete();
 
 -- Initialize upload counts for existing users based on their current files
 update public.users u

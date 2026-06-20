@@ -62,24 +62,24 @@ export const PricingPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/20">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-6 shadow-lg shadow-blue-500/25">
-            <Zap size={16} />
-            <span>Simple, Transparent Pricing</span>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs font-semibold mb-4">
+            <Zap size={14} />
+            <span>Simple Pricing</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">
             Choose Your Plan
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Start free and upgrade when you need unlimited power. No hidden fees, cancel anytime.
+          <p className="text-sm text-gray-600 max-w-xl mx-auto">
+            Start free and upgrade when you need unlimited power. No hidden fees.
           </p>
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-16">
           {plans.map((plan) => {
             const Icon = plan.icon
             const isCurrentPlan = currentTier === plan.tier
@@ -88,55 +88,55 @@ export const PricingPage = () => {
             return (
               <div
                 key={plan.tier}
-                className={`relative pricing-card ${isHighlighted ? 'highlighted' : ''}`}
+                className={`relative ${isHighlighted ? 'pricing-card-pro' : 'pricing-card-free'}`}
               >
                 {isHighlighted && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-10">
-                    <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                      <Crown size={12} />
-                      MOST POPULAR
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 z-10">
+                    <span className="inline-flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-md text-[10px] font-bold shadow-sm">
+                      <Crown size={10} />
+                      POPULAR
                     </span>
                   </div>
                 )}
 
-                <div className="p-8">
+                <div className="p-6">
                   {/* Icon & Name */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className={`p-3 rounded-xl ${
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <div className={`p-2 rounded-md ${
                       isHighlighted 
-                        ? 'bg-gradient-to-br from-blue-500 to-purple-500 shadow-lg shadow-blue-500/30' 
-                        : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                        ? 'bg-blue-100' 
+                        : 'bg-gray-100'
                     }`}>
-                      <Icon size={24} className={isHighlighted ? 'text-white' : 'text-gray-600'} />
+                      <Icon size={18} className={isHighlighted ? 'text-blue-600' : 'text-gray-600'} />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold text-gray-900">{plan.name}</h3>
-                      <p className="text-sm text-gray-500">{plan.description}</p>
+                      <h3 className="text-xl font-bold text-gray-900">{plan.name}</h3>
+                      <p className="text-xs text-gray-500">{plan.description}</p>
                     </div>
                   </div>
 
                   {/* Price */}
-                  <div className="mb-6">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
-                      <span className="text-gray-500 text-sm">/ {plan.period}</span>
+                  <div className="mb-5">
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                      <span className="text-gray-500 text-xs">/ {plan.period}</span>
                     </div>
                   </div>
 
                   {/* Features */}
-                  <ul className="space-y-3 mb-8">
+                  <ul className="space-y-2.5 mb-6">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-3">
-                        <div className={`mt-0.5 p-1 rounded-full ${
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <div className={`mt-0.5 p-0.5 rounded-full ${
                           isHighlighted 
                             ? 'bg-blue-100' 
                             : 'bg-gray-100'
                         }`}>
-                          <Check size={14} className={
+                          <Check size={12} className={
                             isHighlighted ? 'text-blue-600' : 'text-gray-600'
                           } />
                         </div>
-                        <span className="text-sm text-gray-700">{feature}</span>
+                        <span className="text-xs text-gray-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -145,12 +145,12 @@ export const PricingPage = () => {
                   <Button
                     onClick={() => handleUpgrade(plan.tier)}
                     disabled={isCurrentPlan}
-                    className={`w-full py-3 font-semibold rounded-lg transition-all duration-300 ${
+                    className={`w-full py-2.5 text-xs font-semibold rounded-md transition-all duration-200 ${
                       isCurrentPlan
                         ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         : isHighlighted
-                        ? 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40'
-                        : 'bg-white border-2 border-gray-200 hover:border-blue-300 text-gray-700 hover:text-blue-600'
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : 'bg-white border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900'
                     }`}
                   >
                     {isCurrentPlan ? '✓ Current Plan' : plan.cta}
@@ -162,26 +162,26 @@ export const PricingPage = () => {
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-20 max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-center text-gray-900 mb-8">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-xl font-bold text-center text-gray-900 mb-6">
             Frequently Asked Questions
           </h2>
-          <div className="space-y-4">
-            <div className="pricing-card p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Can I upgrade or downgrade anytime?</h3>
-              <p className="text-sm text-gray-600">
+          <div className="space-y-3">
+            <div className="bg-white border border-gray-200 rounded-md p-5">
+              <h3 className="font-semibold text-sm text-gray-900 mb-1.5">Can I upgrade or downgrade anytime?</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
                 Yes! You can upgrade to Pro anytime. If you downgrade, you'll keep Pro features until the end of your billing period.
               </p>
             </div>
-            <div className="pricing-card p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">What happens to my files if I downgrade?</h3>
-              <p className="text-sm text-gray-600">
+            <div className="bg-white border border-gray-200 rounded-md p-5">
+              <h3 className="font-semibold text-sm text-gray-900 mb-1.5">What happens to my files if I downgrade?</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
                 Your existing files remain accessible. However, on the free tier, you won't be able to upload more than 3 files total.
               </p>
             </div>
-            <div className="pricing-card p-6">
-              <h3 className="font-semibold text-gray-900 mb-2">Do you offer refunds?</h3>
-              <p className="text-sm text-gray-600">
+            <div className="bg-white border border-gray-200 rounded-md p-5">
+              <h3 className="font-semibold text-sm text-gray-900 mb-1.5">Do you offer refunds?</h3>
+              <p className="text-xs text-gray-600 leading-relaxed">
                 Yes, we offer a 14-day money-back guarantee. If you're not satisfied, contact us for a full refund.
               </p>
             </div>
@@ -189,10 +189,10 @@ export const PricingPage = () => {
         </div>
 
         {/* Back Button */}
-        <div className="mt-12 text-center">
+        <div className="mt-10 text-center">
           <button
             onClick={() => navigate(-1)}
-            className="text-gray-600 hover:text-gray-900 text-sm font-medium transition-colors"
+            className="text-gray-600 hover:text-gray-900 text-xs font-medium transition-colors"
           >
             ← Back to Dashboard
           </button>

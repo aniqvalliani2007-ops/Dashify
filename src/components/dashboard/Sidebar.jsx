@@ -72,7 +72,7 @@ export const Sidebar = ({ onCloseMobile }) => {
           <div className="mt-3 p-2.5 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200/50">
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-semibold text-gray-700">Free Tier</span>
-              <span className="text-xs font-bold text-blue-600">{uploadCount} / {uploadLimit}</span>
+              <span className="text-xs font-bold text-blue-600">{uploadCount} / {uploadLimit} used</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
               <div 
@@ -96,7 +96,7 @@ export const Sidebar = ({ onCloseMobile }) => {
                 className="flex items-center gap-1.5 text-[10px] text-blue-600 hover:text-blue-700 font-bold mt-1.5 transition-colors"
               >
                 <Crown size={10} />
-                Upgrade to Pro
+                Upgrade for unlimited
               </button>
             )}
           </div>
