@@ -59,8 +59,8 @@ export const AuthProvider = ({ children }) => {
     }
   }, [])
 
-  const signUp = async (email, password) => {
-    return await authService.signUp(email, password)
+  const signUp = async (email, password, metadata) => {
+    return await authService.signUp(email, password, metadata)
   }
 
   const signIn = async (email, password) => {
@@ -77,10 +77,6 @@ export const AuthProvider = ({ children }) => {
     }
 
     return res
-  }
-
-  const signInWithGoogle = async () => {
-    return await authService.signInWithGoogle()
   }
 
   const signOut = async () => {
@@ -113,7 +109,6 @@ export const AuthProvider = ({ children }) => {
     refreshSubscription,
     signUp,
     signIn,
-    signInWithGoogle,
     signOut
   }
 
