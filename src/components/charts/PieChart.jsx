@@ -19,14 +19,14 @@ export const PieChart = ({ data }) => {
     )
   }
 
-  // Professional color palette for pie segments - blue based
+  // Professional color palette matching Consist UI
   const COLORS = [
-    '#3b82f6', // Blue
-    '#0ea5e9', // Sky
-    '#06b6d4', // Cyan
+    '#1a5d4e', // Dark Green
+    '#f97316', // Orange
+    '#94a3b8', // Slate
+    '#3b82f6', // Slate Blue
     '#10b981', // Emerald
     '#f59e0b', // Amber
-    '#ef4444', // Red
   ]
 
   const CustomTooltip = ({ active, payload }) => {
@@ -35,7 +35,7 @@ export const PieChart = ({ data }) => {
         <div className="bg-white border border-gray-200 p-3 rounded shadow-lg">
           <p className="text-sm font-bold text-gray-900">{payload[0].name}</p>
           <p className="text-xs font-semibold text-gray-600 mt-0.5">
-            Value: <span className="text-blue-600 font-bold">{payload[0].value.toLocaleString()}</span>
+            Value: <span className="text-[#1a5d4e] font-bold">{payload[0].value.toLocaleString()}</span>
           </p>
         </div>
       )
@@ -123,7 +123,7 @@ export const PieChart = ({ data }) => {
                   {item.value.toLocaleString()}
                 </td>
                 <td className="px-4 py-2 text-right">
-                  <span className="inline-block bg-blue-50 text-blue-600 px-2 py-1 rounded font-semibold scale-90 origin-right">
+                  <span className="inline-block bg-green-50 text-[#1a5d4e] px-2 py-1 rounded font-semibold scale-90 origin-right">
                     {getPercentage(item.value)}%
                   </span>
                 </td>
@@ -136,7 +136,7 @@ export const PieChart = ({ data }) => {
         <div className="px-4 py-2 bg-white border-t border-gray-200 text-xs text-gray-600 font-medium flex items-center justify-between sticky bottom-0 z-10 shadow-[0_-2px_6px_rgba(0,0,0,0.02)]">
           <div>
             <span>Total: </span>
-            <span className="text-blue-600 font-bold">{totalValue.toLocaleString()}</span>
+            <span className="text-[#1a5d4e] font-bold">{totalValue.toLocaleString()}</span>
           </div>
           <div>
             <span>Items: </span>

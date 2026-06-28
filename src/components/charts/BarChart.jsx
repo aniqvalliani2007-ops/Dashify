@@ -25,7 +25,7 @@ export const BarChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
       return (
         <div className="bg-white border border-gray-200 p-3 rounded shadow-lg">
           <p className="text-xs font-semibold text-gray-600 mb-1">{label}</p>
-          <p className="text-sm font-bold text-blue-600">
+          <p className="text-sm font-bold text-[#1a5d4e]">
             {payload[0].name}: <span className="text-gray-900">{payload[0].value.toLocaleString()}</span>
           </p>
         </div>
@@ -42,8 +42,8 @@ export const BarChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
       >
         <defs>
           <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.8} />
-            <stop offset="100%" stopColor="#60a5fa" stopOpacity={0.1} />
+            <stop offset="0%" stopColor="#1a5d4e" stopOpacity={0.8} />
+            <stop offset="100%" stopColor="#237e69" stopOpacity={0.1} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} vertical={false} />
@@ -62,7 +62,7 @@ export const BarChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
           axisLine={false}
           dx={-5}
         />
-        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(59, 130, 246, 0.05)', radius: 4 }} />
+        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(26, 93, 78, 0.05)', radius: 4 }} />
         <Bar
           dataKey={yAxisKey}
           name={yAxisKey}
