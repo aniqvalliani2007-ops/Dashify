@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCSV } from '../../hooks/useCSV'
 import { useAuth } from '../../hooks/useAuth'
-import { FileText, Database, Plus, Trash2, Calendar, Folder, Crown, AlertCircle, LayoutDashboard, LineChart, Users, MessageSquare, Monitor, HelpCircle, MessageCircle } from 'lucide-react'
+import { FileText, Database, Plus, Trash2, Calendar, Folder, Crown, AlertCircle, LayoutDashboard, LineChart, Users, MessageSquare, Monitor, HelpCircle, MessageCircle, BarChart3 } from 'lucide-react'
 import { Button } from '../common/Button'
 
 export const Sidebar = ({ onCloseMobile }) => {
@@ -53,10 +53,12 @@ export const Sidebar = ({ onCloseMobile }) => {
     <div className="h-full flex flex-col bg-white">
       {/* Brand / Logo Area */}
       <div className="h-16 flex items-center px-6 shrink-0 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="w-6 h-6 bg-[#1a5d4e] rounded flex items-center justify-center mr-3">
-          <div className="w-3 h-3 border-2 border-white rounded-sm transform rotate-45"></div>
+        <div className="bg-blue-600 p-1 rounded-sm hover:bg-blue-700 transition-colors mr-2.5">
+          <BarChart3 size={18} className="text-white" />
         </div>
-        <span className="text-xl font-bold text-gray-800 tracking-tight">Dashify</span>
+        <span className="text-xl font-medium tracking-tight text-gray-900">
+          Dashify
+        </span>
       </div>
 
       {/* Main Menu Label */}
@@ -115,53 +117,7 @@ export const Sidebar = ({ onCloseMobile }) => {
         )}
       </div>
 
-      {/* Bottom Actions Area */}
-      <div className="p-4 shrink-0 border-t border-gray-100">
-        
-        {/* Toggle & Small Links */}
-        <div className="space-y-1 mb-6 px-2">
-          <div className="flex items-center justify-between py-2 cursor-pointer group">
-            <div className="flex items-center gap-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-              <Monitor size={18} className="text-gray-400" /> Demo Mode
-            </div>
-            <div className="w-8 h-4 bg-[#1a5d4e] rounded-full relative shadow-inner">
-              <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-white rounded-full shadow-sm"></div>
-            </div>
-          </div>
-          
-          <button className="w-full flex items-center gap-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
-            <MessageCircle size={18} className="text-gray-400" /> Feedback
-          </button>
-          
-          <button className="w-full flex items-center gap-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
-            <HelpCircle size={18} className="text-gray-400" /> Help and docs
-          </button>
-        </div>
-
-        {/* Upgrade Card */}
-        {tier === 'free' && (
-          <div className="bg-[#1a5d4e] rounded-xl p-4 text-white relative overflow-hidden shadow-lg shadow-green-900/10">
-            {/* Decorative circles */}
-            <div className="absolute -top-6 -right-6 w-24 h-24 border border-white/10 rounded-full"></div>
-            <div className="absolute -bottom-10 -left-6 w-28 h-28 border border-white/10 rounded-full"></div>
-            
-            <div className="w-8 h-8 rounded-full bg-orange-400 shadow-inner flex items-center justify-center mb-3 relative z-10 border border-orange-300">
-              <div className="w-4 h-4 rounded-full bg-orange-300"></div>
-            </div>
-            
-            <p className="text-xs font-medium leading-relaxed mb-4 relative z-10 opacity-90">
-              Get detailed analytics for help you, upgrade pro
-            </p>
-            
-            <button 
-              onClick={() => navigate('/pricing')}
-              className="bg-white text-[#1a5d4e] text-[11px] font-bold px-3 py-1.5 rounded relative z-10 hover:bg-gray-50 transition-colors shadow-sm"
-            >
-              Upgrade Now
-            </button>
-          </div>
-        )}
-      </div>
+      {/* Note: Bottom Actions Area was removed as per user request */}
     </div>
   )
 }
