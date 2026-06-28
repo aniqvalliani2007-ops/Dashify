@@ -1,333 +1,189 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import Navbar from '../components/common/Navbar'
-import { BarChart3, Database, ShieldCheck, ArrowRight, Activity, FileSpreadsheet, Sparkles, Zap, TrendingUp, Users, Lock, Cloud, CheckCircle, Star, Quote } from 'lucide-react'
+import { ArrowUp, Sparkles, Code, FileSpreadsheet, Download } from 'lucide-react'
 
 export const LandingPage = () => {
   const { user } = useAuth()
+  const [activeTab, setActiveTab] = useState('Upload')
 
-  const features = [
-    {
-      icon: FileSpreadsheet,
-      title: 'Instant CSV Upload',
-      desc: 'Drag and drop your CSV files. Automatic column detection and data type inference.'
-    },
-    {
-      icon: Activity,
-      title: 'Interactive Charts',
-      desc: 'Beautiful bar, line, and pie charts with real-time customization and filtering.'
-    },
-    {
-      icon: Database,
-      title: 'Secure Storage',
-      desc: 'Enterprise-grade security with row-level access control. Your data stays private.'
-    },
-    {
-      icon: Sparkles,
-      title: 'AI-Powered Insights',
-      desc: 'Ask questions about your data and get intelligent analysis powered by AI.'
-    },
-    {
-      icon: Zap,
-      title: 'Lightning Fast',
-      desc: 'Process thousands of rows instantly. Optimized for performance and speed.'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Advanced Analytics',
-      desc: 'Aggregations, filters, and custom calculations. Export results as CSV.'
-    }
-  ]
-
-  const benefits = [
-    {
-      icon: CheckCircle,
-      title: 'No Installation Required',
-      desc: 'Cloud-based platform accessible from any browser. Start analyzing in seconds.'
-    },
-    {
-      icon: Users,
-      title: 'Built for Teams',
-      desc: 'Collaborate with your team. Share insights and dashboards effortlessly.'
-    },
-    {
-      icon: Lock,
-      title: 'Enterprise Security',
-      desc: 'Bank-level encryption and compliance. SOC 2 Type II certified infrastructure.'
-    },
-    {
-      icon: Cloud,
-      title: 'Unlimited Storage',
-      desc: 'Store all your datasets in the cloud. Access from anywhere, anytime.'
-    }
-  ]
-
-  const testimonials = [
-    {
-      name: 'Sarah Johnson',
-      role: 'Data Analyst at TechCorp',
-      content: 'Dashify transformed how we analyze sales data. What used to take hours now takes minutes.',
-      rating: 5
-    },
-    {
-      name: 'Michael Chen',
-      role: 'Product Manager',
-      content: 'The AI insights feature is incredible. It finds patterns we would have missed manually.',
-      rating: 5
-    },
-    {
-      name: 'Emily Rodriguez',
-      role: 'Business Intelligence Lead',
-      content: 'Clean interface, powerful features. Our entire team switched to Dashify within a week.',
-      rating: 5
-    }
-  ]
-
-  const stats = [
-    { value: '10K+', label: 'Active Users' },
-    { value: '1M+', label: 'Files Processed' },
-    { value: '99.9%', label: 'Uptime' },
-    { value: '24/7', label: 'Support' }
+  const mockData = [
+    { company: 'TechNova', country: 'United States', employees: '450', revenue: '$15M', status: 'Active' },
+    { company: 'DataSphere', country: 'Germany', employees: '120', revenue: '$4.2M', status: 'Pending' },
+    { company: 'CloudScale', country: 'United Kingdom', employees: '280', revenue: '$8.5M', status: 'Active' },
+    { company: 'NexusAI', country: 'Canada', employees: '85', revenue: '$2.1M', status: 'Active' },
+    { company: 'QuantumFlow', country: 'France', employees: '310', revenue: '$11M', status: 'Pending' },
+    { company: 'StreamLine', country: 'Australia', employees: '150', revenue: '$5.8M', status: 'Active' }
   ]
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col">
-      {/* Header */}
+    <div className="min-h-screen bg-white text-gray-900 font-sans relative overflow-hidden flex flex-col">
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-20 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-            {/* Left: Hero Content */}
-            <div className="text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold mb-4 sm:mb-6">
-                <Sparkles size={14} />
-                <span>Next-Gen Analytics Platform</span>
-              </div>
-              
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-gray-900 leading-tight mb-4 sm:mb-6">
-                Transform CSV Data into{' '}
-                <span className="text-blue-600">Powerful Insights</span>
-              </h1>
-              
-              <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8 max-w-xl">
-                Upload, visualize, and analyze your data in seconds. No coding required. 
-                Built for analysts, managers, and teams who need fast, reliable insights.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-8 sm:mb-12">
-                <Link
-                  to={user ? '/dashboard' : '/register'}
-                  className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-200 text-sm sm:text-base"
-                >
-                  {user ? 'Go to Dashboard' : 'Start Free Trial'}
-                  <ArrowRight size={18} />
-                </Link>
-                <Link
-                  to="/login"
-                  className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-50 border-2 border-gray-300 hover:border-gray-400 text-gray-900 font-semibold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-200 text-sm sm:text-base"
-                >
-                  View Demo
-                </Link>
-              </div>
+      {/* Floating Decorative Elements - Left */}
+      <div className="hidden lg:block absolute left-0 top-32 bottom-0 w-64 pointer-events-none">
+        <div className="absolute top-10 left-4 w-16 h-16 bg-blue-100 rounded-sm opacity-60 backdrop-blur-md transform -rotate-6"></div>
+        <div className="absolute top-32 left-12 w-24 h-24 bg-gradient-to-br from-blue-400 to-blue-600 rounded-sm opacity-80 shadow-xl flex items-center justify-center text-white font-mono text-xs p-2">
+          <div className="grid grid-cols-2 gap-1 opacity-50">
+            <span>0</span><span>1</span>
+            <span>1</span><span>0</span>
+            <span>0</span><span>1</span>
+          </div>
+        </div>
+        <div className="absolute top-64 left-2 w-20 h-20 bg-blue-200 rounded-sm opacity-50 backdrop-blur-md transform rotate-12"></div>
+        <div className="absolute top-96 left-8 w-28 h-28 bg-gradient-to-tr from-blue-300 to-cyan-300 rounded-sm opacity-70 shadow-lg"></div>
+        <div className="absolute top-[32rem] left-16 w-16 h-16 bg-blue-500 rounded-sm opacity-60 flex items-center justify-center text-white/40 font-mono text-[8px] p-1">
+          const data = [];
+        </div>
+      </div>
 
-              {/* Stats */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-gray-200">
-                {stats.map((stat, idx) => (
-                  <div key={idx}>
-                    <div className="text-xl sm:text-2xl font-bold text-blue-600">{stat.value}</div>
-                    <div className="text-xs text-gray-600 mt-1">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
+      {/* Floating Decorative Elements - Right */}
+      <div className="hidden lg:block absolute right-0 top-32 bottom-0 w-64 pointer-events-none">
+        <div className="absolute top-20 right-16 w-20 h-20 bg-gradient-to-bl from-teal-200 to-blue-300 rounded-sm opacity-70 shadow-lg transform rotate-6"></div>
+        <div className="absolute top-48 right-8 w-16 h-16 bg-blue-100 rounded-sm opacity-60 backdrop-blur-md"></div>
+        <div className="absolute top-72 right-12 w-24 h-24 bg-gradient-to-tr from-blue-400 to-indigo-400 rounded-sm opacity-80 shadow-xl"></div>
+        <div className="absolute top-[26rem] right-4 w-20 h-20 bg-cyan-100 rounded-sm opacity-50 transform -rotate-12"></div>
+        <div className="absolute top-[34rem] right-20 w-16 h-16 bg-blue-600 rounded-sm opacity-60 shadow-md"></div>
+      </div>
+
+      <main className="flex-1 flex flex-col items-center pt-20 sm:pt-28 pb-16 px-4 z-10 w-full max-w-7xl mx-auto">
+        
+        {/* Hero Content */}
+        <div className="text-center w-full max-w-4xl mx-auto mb-12">
+          <h1 className="text-4xl sm:text-5xl lg:text-[4rem] font-bold text-gray-900 tracking-tight leading-tight mb-6">
+            Data analytics, built for everyone
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-500 mb-8 max-w-2xl mx-auto font-medium">
+            One platform for uploading, visualizing, and analyzing your CSV data
+          </p>
+          <Link
+            to={user ? '/dashboard' : '/register'}
+            className="inline-flex items-center justify-center bg-black hover:bg-gray-800 text-white font-medium px-6 py-3 rounded-md transition-colors text-sm sm:text-base"
+          >
+            Try Dashify for free
+          </Link>
+        </div>
+
+        {/* Dashboard/App Preview Card */}
+        <div className="w-full max-w-5xl mx-auto mt-4 bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden">
+          
+          {/* Card Header */}
+          <div className="px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h3 className="text-gray-800 font-medium text-sm sm:text-base">
+              Tech companies with 100+ employees, recent revenue
+            </h3>
+          </div>
+
+          {/* Search/Filter Bar */}
+          <div className="px-6 py-4 flex items-center gap-3 border-b border-gray-50 bg-gray-50/50">
+            <div className="flex bg-white rounded-md border border-gray-200 overflow-hidden text-sm shadow-sm">
+              <button 
+                className={`px-4 py-2 font-medium transition-colors ${activeTab === 'Upload' ? 'text-gray-900 bg-gray-50/50' : 'text-gray-500 hover:text-gray-700'}`}
+                onClick={() => setActiveTab('Upload')}
+              >
+                <div className="flex items-center gap-1.5">
+                  <FileSpreadsheet size={14} /> Upload
+                </div>
+              </button>
+              <div className="w-px bg-gray-200"></div>
+              <button 
+                className={`px-4 py-2 font-medium transition-colors ${activeTab === 'Agent' ? 'text-blue-600 bg-blue-50/10' : 'text-gray-500 hover:text-gray-700'}`}
+                onClick={() => setActiveTab('Agent')}
+              >
+                <div className="flex items-center gap-1.5">
+                  <Sparkles size={14} className={activeTab === 'Agent' ? 'text-blue-600' : ''} /> AI Agent
+                </div>
+              </button>
             </div>
-
-            {/* Right: Hero Image/Visual */}
-            <div className="relative order-first lg:order-last">
-              <div className="glass-card border-2 border-gray-200 p-6 sm:p-8 bg-white shadow-2xl">
-                <div className="flex items-center gap-2 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
-                  <BarChart3 size={20} className="text-blue-600" />
-                  <span className="font-semibold text-gray-900 text-sm sm:text-base">Live Dashboard Preview</span>
-                </div>
-                <div className="space-y-3 sm:space-y-4">
-                  <div className="h-24 sm:h-32 bg-gradient-to-r from-blue-100 to-blue-50 border border-blue-200 flex items-center justify-center">
-                    <Activity size={40} className="text-blue-600 sm:w-12 sm:h-12" />
-                  </div>
-                  <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                    <div className="h-16 sm:h-20 bg-gray-50 border border-gray-200"></div>
-                    <div className="h-16 sm:h-20 bg-gray-50 border border-gray-200"></div>
-                    <div className="h-16 sm:h-20 bg-gray-50 border border-gray-200"></div>
-                  </div>
-                  <div className="h-20 sm:h-24 bg-gray-50 border border-gray-200"></div>
-                </div>
-              </div>
-              <div className="absolute -bottom-6 -right-6 w-24 h-24 sm:w-32 sm:h-32 bg-blue-600 opacity-10 blur-3xl"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-12 sm:py-20 bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
-              Everything You Need to Analyze Data
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              Powerful features designed for modern data analysis. Simple enough for beginners, 
-              powerful enough for experts.
-            </p>
+            
+            <div className="flex-1"></div>
+            
+            <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md shadow-sm transition-colors">
+              <ArrowUp size={16} />
+            </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {features.map((feature, idx) => (
-              <div key={idx} className="glass-card border border-gray-200 p-5 sm:p-6 hover:border-blue-300 hover:shadow-lg transition-all">
-                <div className="w-12 h-12 bg-blue-50 border border-blue-200 flex items-center justify-center mb-3 sm:mb-4">
-                  <feature.icon size={24} className="text-blue-600" />
-                </div>
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-sm text-gray-600 leading-relaxed">{feature.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-20 bg-gray-50 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Dashify?
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Join thousands of teams who trust Dashify for their data analytics needs.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {benefits.map((benefit, idx) => (
-              <div key={idx} className="flex gap-4 glass-card border border-gray-200 p-6 bg-white">
-                <div className="w-12 h-12 bg-green-50 border border-green-200 flex items-center justify-center shrink-0">
-                  <benefit.icon size={24} className="text-green-600" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">{benefit.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Loved by Data Professionals
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              See what our users have to say about Dashify.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="glass-card border border-gray-200 p-6 bg-white">
-                <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} size={16} className="text-yellow-500 fill-yellow-500" />
+          <div className="flex flex-col md:flex-row">
+            {/* Sidebar Controls */}
+            <div className="w-full md:w-64 p-6 border-r border-gray-100 bg-gray-50/30 shrink-0">
+              <div className="mb-8">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">EFFORT</p>
+                <div className="flex bg-gray-100/80 rounded-md p-1">
+                  {['Auto', 'Low', 'Medium', 'High'].map(level => (
+                    <button 
+                      key={level}
+                      className={`flex-1 text-xs py-1.5 rounded-sm font-medium ${level === 'Auto' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                      {level}
+                    </button>
                   ))}
                 </div>
-                <Quote size={24} className="text-blue-200 mb-3" />
-                <p className="text-sm text-gray-700 leading-relaxed mb-4 italic">
-                  "{testimonial.content}"
-                </p>
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="font-semibold text-gray-900 text-sm">{testimonial.name}</div>
-                  <div className="text-xs text-gray-600">{testimonial.role}</div>
+              </div>
+              
+              <div>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">OUTPUT</p>
+                <div className="flex bg-gray-100/80 rounded-md p-1">
+                  <button className="flex-1 bg-white shadow-sm text-gray-900 text-xs py-1.5 rounded-sm font-medium">Table</button>
+                  <button className="flex-1 text-gray-500 hover:text-gray-700 text-xs py-1.5 rounded-sm font-medium">Chart</button>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-blue-600 to-blue-700 text-white">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-            Ready to Transform Your Data?
-          </h2>
-          <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who use Dashify to make better data-driven decisions.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to={user ? '/dashboard' : '/register'}
-              className="inline-flex items-center justify-center gap-2 bg-white hover:bg-gray-100 text-blue-600 font-semibold px-8 py-4 transition-all duration-200"
-            >
-              Get Started Free
-              <ArrowRight size={18} />
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-blue-700 border-2 border-white text-white font-semibold px-8 py-4 transition-all duration-200"
-            >
-              Contact Sales
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-8 sm:py-12 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
-            <div>
-              <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                <BarChart3 size={24} className="text-blue-500" />
-                <span className="text-lg sm:text-xl font-bold text-white">Dashify</span>
+              <div className="mt-16 flex items-center gap-2">
+                <button className="flex items-center gap-1.5 text-xs font-medium text-gray-600 bg-white border border-gray-200 px-3 py-1.5 rounded hover:bg-gray-50 transition-colors shadow-sm">
+                  API Playground <ArrowUp size={10} className="transform rotate-45" />
+                </button>
+                <button className="p-1.5 text-gray-500 bg-white border border-gray-200 rounded hover:bg-gray-50 transition-colors shadow-sm">
+                  <Code size={14} />
+                </button>
               </div>
-              <p className="text-sm text-gray-500">
-                Transform your CSV data into beautiful, actionable insights.
-              </p>
             </div>
-            <div>
-              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm">Product</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
-              </ul>
+
+            {/* Main Data Table */}
+            <div className="flex-1 p-0 overflow-x-auto">
+              <div className="px-6 py-3 border-b border-gray-100 flex items-center gap-2 text-sm text-green-600 font-medium">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                Complete - 6 rows - 5 columns
+              </div>
+              <table className="w-full text-left border-collapse min-w-[500px]">
+                <thead>
+                  <tr>
+                    {['COMPANY', 'COUNTRY', 'EMPLOYEES', 'REVENUE', 'STATUS'].map((head) => (
+                      <th key={head} className="px-6 py-3 text-[10px] font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                        {head}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockData.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50/50 transition-colors border-b border-gray-50 last:border-0">
+                      <td className="px-6 py-3 text-sm font-medium text-gray-900">{row.company}</td>
+                      <td className="px-6 py-3 text-sm text-gray-600">{row.country}</td>
+                      <td className="px-6 py-3 text-sm text-gray-600 font-mono">{row.employees}</td>
+                      <td className="px-6 py-3 text-sm text-gray-600 font-mono">{row.revenue}</td>
+                      <td className="px-6 py-3 text-sm text-gray-600">{row.status}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div>
-              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm">Support</h4>
-              <ul className="space-y-2 text-sm">
-                <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-white font-semibold mb-3 sm:mb-4 text-sm">Legal</h4>
-              <ul className="space-y-2 text-sm">
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="pt-6 sm:pt-8 border-t border-gray-800 text-center text-xs sm:text-sm">
-            <p>&copy; {new Date().getFullYear()} Dashify. All rights reserved. Built with React, Tailwind CSS, and Supabase.</p>
           </div>
         </div>
-      </footer>
+
+        {/* Logos Section */}
+        <div className="w-full max-w-4xl mx-auto mt-20 flex flex-wrap justify-center items-center gap-8 sm:gap-12 opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
+          <div className="text-xl font-bold font-sans tracking-tight">databricks</div>
+          <div className="text-2xl font-bold font-sans tracking-tighter">groq</div>
+          <div className="text-xl font-black font-sans uppercase tracking-widest">GAMMA</div>
+          <div className="text-lg font-bold font-sans flex items-center gap-1">
+            <div className="flex gap-0.5"><div className="w-1.5 h-3 bg-current rounded-sm transform rotate-12"></div><div className="w-1.5 h-3 bg-current rounded-sm transform rotate-12"></div></div>
+            monday<span className="font-normal text-sm">.com</span>
+          </div>
+          <div className="text-xl font-bold font-sans">HubSpot</div>
+        </div>
+        
+      </main>
     </div>
   )
 }

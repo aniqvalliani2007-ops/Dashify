@@ -28,14 +28,14 @@ export const Navbar = () => {
   ]
 
   return (
-    <nav className="sticky top-0 z-40 w-full glass-panel border-b border-gray-200 px-4 sm:px-6 py-4 bg-white">
-      <div className="flex items-center justify-between relative">
+    <nav className="w-full px-6 sm:px-10 py-6 bg-white z-40 relative">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
         {/* Brand logo - Left */}
         <Link to="/" className="flex items-center gap-2.5 group z-50">
-          <div className="bg-blue-600 p-1.5 group-hover:bg-blue-700 transition-colors">
-            <BarChart3 size={20} className="text-white" />
+          <div className="bg-blue-600 p-1 rounded-sm group-hover:bg-blue-700 transition-colors">
+            <BarChart3 size={18} className="text-white" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-gray-900">
+          <span className="text-xl font-medium tracking-tight text-gray-900">
             Dashify
           </span>
         </Link>
@@ -46,10 +46,9 @@ export const Navbar = () => {
             <Link
               key={link.to}
               to={link.to}
-              className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors relative group"
+              className="text-[13px] font-medium text-gray-600 hover:text-gray-900 transition-colors relative group"
             >
               {link.label}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
             </Link>
           ))}
         </div>
@@ -77,16 +76,16 @@ export const Navbar = () => {
           ) : (
             <>
               <Link
-                to="/login"
-                className="hidden sm:inline-block text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors px-3 py-1.5"
+                to="/contact"
+                className="hidden sm:inline-block text-[13px] font-medium text-gray-900 hover:text-gray-600 transition-colors px-4 py-2 bg-gray-100 rounded-md mr-2"
               >
-                Log in
+                Contact sales
               </Link>
               <Link
                 to="/register"
-                className="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 transition-all"
+                className="text-[13px] font-medium text-white bg-black hover:bg-gray-800 px-4 py-2 rounded-md transition-all"
               >
-                Get Started
+                Sign up
               </Link>
             </>
           )}
