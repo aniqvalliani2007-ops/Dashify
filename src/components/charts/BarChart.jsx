@@ -25,7 +25,7 @@ export const BarChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
       return (
         <div className="bg-white border border-gray-200 p-3 rounded shadow-lg">
           <p className="text-xs font-semibold text-gray-600 mb-1">{label}</p>
-          <p className="text-sm font-bold text-[#1a5d4e]">
+          <p className="text-sm font-bold text-blue-600">
             {payload[0].name}: <span className="text-gray-900">{payload[0].value.toLocaleString()}</span>
           </p>
         </div>

@@ -23,7 +23,7 @@ export const LineChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
       return (
         <div className="bg-white border border-gray-200 p-3 rounded shadow-lg">
           <p className="text-xs font-semibold text-gray-600 mb-1">{label}</p>
-          <p className="text-sm font-bold text-[#1a5d4e]">
+          <p className="text-sm font-bold text-blue-600">
             {payload[0].name}: <span className="text-gray-900">{payload[0].value.toLocaleString()}</span>
           </p>
         </div>
@@ -40,8 +40,8 @@ export const LineChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
       >
         <defs>
           <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#1a5d4e" stopOpacity={0.3} />
-            <stop offset="100%" stopColor="#1a5d4e" stopOpacity={0.0} />
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.3} />
+            <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.0} />
           </linearGradient>
         </defs>
         <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} vertical={false} />
@@ -65,11 +65,11 @@ export const LineChart = ({ data, xAxisKey = 'name', yAxisKey = 'value' }) => {
           type="monotone"
           dataKey={yAxisKey}
           name={yAxisKey}
-          stroke="#1a5d4e"
+          stroke="#3b82f6"
           strokeWidth={2.5}
           fillOpacity={1}
           fill="url(#areaGradient)"
-          activeDot={{ r: 6, stroke: '#f5f7fa', strokeWidth: 2, fill: '#1a5d4e' }}
+          activeDot={{ r: 6, stroke: '#f5f7fa', strokeWidth: 2, fill: '#3b82f6' }}
         />
       </AreaChart>
     </ResponsiveContainer>

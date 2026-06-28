@@ -45,7 +45,7 @@ export const DashboardPage = () => {
                 <button
                   onClick={() => setActiveTab('insights')}
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
-                    activeTab === 'insights' ? 'bg-[#1a5d4e] text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    activeTab === 'insights' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
                   <BarChart3 size={16} className="inline mr-2" /> Overview
@@ -53,7 +53,7 @@ export const DashboardPage = () => {
                 <button
                   onClick={() => setActiveTab('builder')}
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
-                    activeTab === 'builder' ? 'bg-[#1a5d4e] text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    activeTab === 'builder' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
                   <Layout size={16} className="inline mr-2" /> Builder
@@ -61,7 +61,7 @@ export const DashboardPage = () => {
                 <button
                   onClick={() => setActiveTab('transform')}
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
-                    activeTab === 'transform' ? 'bg-[#1a5d4e] text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    activeTab === 'transform' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
                   <Wand2 size={16} className="inline mr-2" /> Data Transform
@@ -69,7 +69,7 @@ export const DashboardPage = () => {
                 <button
                   onClick={() => setActiveTab('relationships')}
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors whitespace-nowrap ${
-                    activeTab === 'relationships' ? 'bg-[#1a5d4e] text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                    activeTab === 'relationships' ? 'bg-blue-600 text-white' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
                   }`}
                 >
                   <TrendingUp size={16} className="inline mr-2" /> Relationships
@@ -124,7 +124,7 @@ export const DashboardPage = () => {
         ) : (
           /* Empty/Upload State */
           <div className="flex flex-col items-center justify-center py-20 px-6 bg-white border border-gray-100 shadow-sm rounded-xl max-w-3xl mx-auto text-center gap-6 mt-10">
-            <div className="p-4 bg-green-50 text-[#1a5d4e] rounded-full">
+            <div className="p-4 bg-blue-50 text-blue-600 rounded-full">
               <BarChart3 size={48} />
             </div>
             
@@ -138,7 +138,7 @@ export const DashboardPage = () => {
             <Button
               variant="primary"
               onClick={() => setIsUploadOpen(true)}
-              className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-[#1a5d4e] hover:bg-[#134237] text-white rounded-lg shadow-lg shadow-green-900/20"
+              className="flex items-center gap-2 px-6 py-3 text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg shadow-blue-900/20"
             >
               <UploadCloud size={18} />
               Upload Dataset

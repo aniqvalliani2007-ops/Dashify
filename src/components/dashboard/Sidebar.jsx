@@ -87,7 +87,7 @@ export const Sidebar = ({ onCloseMobile }) => {
           {isLimitReached ? (
             <Crown size={18} className="text-red-500 shrink-0" />
           ) : (
-            <Plus size={18} className="text-gray-400 group-hover:text-green-600 shrink-0" />
+            <Plus size={18} className="text-gray-400 group-hover:text-blue-600 shrink-0" />
           )}
           <div className="flex flex-col items-start text-left">
             <span>{isLimitReached ? 'Limit Reached (3/3)' : 'Upload Dataset'}</span>
@@ -97,7 +97,7 @@ export const Sidebar = ({ onCloseMobile }) => {
 
         {loadingFiles ? (
           <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-5 w-5 border-2 border-[#1a5d4e] border-t-transparent"></div>
+            <div className="inline-block animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
           </div>
         ) : files.length === 0 ? (
           <div className="px-3 py-4 text-center">
@@ -112,7 +112,7 @@ export const Sidebar = ({ onCloseMobile }) => {
                 onClick={() => handleSelectFile(file)}
                 className={`group flex items-center justify-between px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
                   isSelected 
-                    ? 'bg-[#1a5d4e] text-white shadow-md shadow-green-900/10' 
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-900/10' 
                     : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
                 }`}
               >
