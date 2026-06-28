@@ -2,12 +2,12 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCSV } from '../../hooks/useCSV'
 import { useAuth } from '../../hooks/useAuth'
-import { FileText, Database, Plus, Trash2, Calendar, Folder, Crown, AlertCircle, LayoutDashboard, LineChart, Users, MessageSquare, Monitor, HelpCircle, MessageCircle, BarChart3 } from 'lucide-react'
+import { FileText, Database, Plus, Trash2, Calendar, Folder, Crown, AlertCircle, LayoutDashboard, LineChart, Users, MessageSquare, Monitor, HelpCircle, MessageCircle, BarChart3, LogOut } from 'lucide-react'
 import { Button } from '../common/Button'
 
 export const Sidebar = ({ onCloseMobile }) => {
   const navigate = useNavigate()
-  const { subscription } = useAuth()
+  const { subscription, signOut } = useAuth()
   const {
     files,
     selectedFile,
@@ -24,9 +24,7 @@ export const Sidebar = ({ onCloseMobile }) => {
 
   const handleUploadClick = () => {
     if (isLimitReached) {
-      if (window.confirm('You\'ve reached your free tier limit of 3 files. Upgrade to Pro for unlimited uploads?')) {
-        navigate('/pricing')
-      }
+      navigate('/pricing')
       return
     }
     setIsUploadOpen(true)
@@ -46,6 +44,15 @@ export const Sidebar = ({ onCloseMobile }) => {
       } catch (err) {
         alert('Failed to delete: ' + err.message)
       }
+    }
+  }
+
+  const handleSignOut = async () => {
+    try {
+      await signOut()
+      navigate('/login', { replace: true })
+    } catch (err) {
+      console.error('Sign out error:', err)
     }
   }
 
@@ -71,10 +78,21 @@ export const Sidebar = ({ onCloseMobile }) => {
         
         <button 
           onClick={handleUploadClick}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors group mb-4"
+          className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors group mb-4 ${
+            isLimitReached 
+              ? 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200' 
+              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+          }`}
         >
-          <Plus size={18} className="text-gray-400 group-hover:text-green-600" />
-          {isLimitReached ? 'Limit Reached' : 'Upload Dataset'}
+          {isLimitReached ? (
+            <Crown size={18} className="text-red-500 shrink-0" />
+          ) : (
+            <Plus size={18} className="text-gray-400 group-hover:text-green-600 shrink-0" />
+          )}
+          <div className="flex flex-col items-start text-left">
+            <span>{isLimitReached ? 'Limit Reached (3/3)' : 'Upload Dataset'}</span>
+            {isLimitReached && <span className="text-[10px] text-red-500 font-bold uppercase tracking-wider mt-0.5">Upgrade to Pro</span>}
+          </div>
         </button>
 
         {loadingFiles ? (
@@ -117,7 +135,16 @@ export const Sidebar = ({ onCloseMobile }) => {
         )}
       </div>
 
-      {/* Note: Bottom Actions Area was removed as per user request */}
+      {/* Bottom Actions Area */}
+      <div className="p-4 shrink-0 border-t border-gray-100">
+        <button
+          onClick={handleSignOut}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:text-red-600 hover:bg-red-50 transition-colors group"
+        >
+          <LogOut size={18} className="text-gray-400 group-hover:text-red-500" />
+          Sign Out
+        </button>
+      </div>
     </div>
   )
 }
